@@ -1,4 +1,4 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.7.0';
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.4';
 
 // Helper function to add delays and avoid rate limits
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
