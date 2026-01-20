@@ -114,19 +114,19 @@ function SuperBowlSquaresContent() {
   return (
     <div className="min-h-screen bg-slate-50 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
           <div>
-            <h1 className="text-3xl font-bold text-slate-900">Super Bowl Squares</h1>
-            <p className="text-slate-600">Pick your squares - $5 per square</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-slate-900">Super Bowl Squares</h1>
+            <p className="text-sm sm:text-base text-slate-600">Pick your squares - $5 per square</p>
           </div>
           {settings && (
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 sm:gap-4 text-sm sm:text-base">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <TeamIcon icon={settings.away_team_icon} name={settings.away_team_name} />
                 <span className="font-semibold">{settings.away_team_name || 'Away'}</span>
               </div>
               <span className="text-slate-400">vs</span>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1 sm:gap-2">
                 <TeamIcon icon={settings.home_team_icon} name={settings.home_team_name} />
                 <span className="font-semibold">{settings.home_team_name || 'Home'}</span>
               </div>
@@ -197,26 +197,26 @@ function SuperBowlSquaresContent() {
         </div>
 
         <Card>
-          <CardContent className="p-6">
-            <div className="overflow-x-auto">
-              <div className="inline-block min-w-full">
-                <table className="border-collapse">
+          <CardContent className="p-2 sm:p-6">
+            <div className="overflow-x-auto -mx-2 sm:mx-0">
+              <div className="inline-block min-w-[600px]">
+                <table className="border-collapse mx-auto">
                   <tbody>
                     <tr>
-                      <td className="w-12 h-12"></td>
-                      <td className="w-12 h-12"></td>
-                      <td className="text-center font-bold p-2" colSpan={10}>
-                        <div className="flex items-center justify-center gap-2">
+                      <td className="w-8 h-8 sm:w-12 sm:h-12"></td>
+                      <td className="w-8 h-8 sm:w-12 sm:h-12"></td>
+                      <td className="text-center font-bold p-1 sm:p-2 text-xs sm:text-base" colSpan={10}>
+                        <div className="flex items-center justify-center gap-1 sm:gap-2">
                           <TeamIcon icon={settings?.home_team_icon} name={settings?.home_team_name} />
-                          <span>{settings?.home_team_name || 'Home Team'}</span>
+                          <span className="hidden sm:inline">{settings?.home_team_name || 'Home Team'}</span>
                         </div>
                       </td>
                     </tr>
                     <tr>
-                      <td className="w-12 h-12"></td>
-                      <td className="w-12 h-12"></td>
+                      <td className="w-8 h-8 sm:w-12 sm:h-12"></td>
+                      <td className="w-8 h-8 sm:w-12 sm:h-12"></td>
                       {[0,1,2,3,4,5,6,7,8,9].map((col) => (
-                        <td key={col} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
+                        <td key={col} className="w-8 h-8 sm:w-12 sm:h-12 text-center text-xs sm:text-base font-bold bg-slate-100 border border-slate-300">
                           {settings?.game_started ? (settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[col] : '?'}
                         </td>
                       ))}
@@ -224,14 +224,14 @@ function SuperBowlSquaresContent() {
                     {[0,1,2,3,4,5,6,7,8,9].map((row) => (
                       <tr key={row}>
                         {row === 0 && (
-                          <td rowSpan={10} className="bg-slate-100 border border-slate-300 align-middle p-2">
-                            <div className="flex items-center justify-center gap-2" style={{writingMode: 'vertical-lr'}}>
+                          <td rowSpan={10} className="bg-slate-100 border border-slate-300 align-middle p-1 sm:p-2">
+                            <div className="flex items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base" style={{writingMode: 'vertical-lr'}}>
                               <TeamIcon icon={settings?.away_team_icon} name={settings?.away_team_name} />
-                              <span className="font-bold">{settings?.away_team_name || 'Away Team'}</span>
+                              <span className="font-bold hidden sm:inline">{settings?.away_team_name || 'Away Team'}</span>
                             </div>
                           </td>
                         )}
-                        <td className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
+                        <td className="w-8 h-8 sm:w-12 sm:h-12 text-center text-xs sm:text-base font-bold bg-slate-100 border border-slate-300">
                           {settings?.game_started ? (settings?.away_numbers || [0,1,2,3,4,5,6,7,8,9])[row] : '?'}
                         </td>
                         {[0,1,2,3,4,5,6,7,8,9].map((col) => {
@@ -245,7 +245,7 @@ function SuperBowlSquaresContent() {
                             <td
                               key={col}
                               onClick={() => !isOccupied && !isLocked && handleSquareClick(row, col)}
-                              className={`w-12 h-12 border border-slate-300 relative cursor-pointer transition-all ${
+                              className={`w-8 h-8 sm:w-12 sm:h-12 border border-slate-300 relative cursor-pointer transition-all ${
                                 isOccupied ? 'bg-slate-200 cursor-not-allowed' :
                                 isLocked && isMine ? 'bg-emerald-100 cursor-not-allowed' :
                                 isSelected ? 'bg-blue-200' :
@@ -254,12 +254,12 @@ function SuperBowlSquaresContent() {
                               }`}
                             >
                               {square?.player_name && (
-                                <div className="absolute inset-0 flex items-center justify-center p-1">
-                                  <span className="text-[8px] font-bold text-center leading-[1.1] break-words overflow-hidden">{square.player_name}</span>
+                                <div className="absolute inset-0 flex items-center justify-center p-0.5 sm:p-1">
+                                  <span className="text-[6px] sm:text-[8px] font-bold text-center leading-[1.1] break-words overflow-hidden">{square.player_name}</span>
                                 </div>
                               )}
                               {isLocked && isMine && (
-                                <Lock className="w-3 h-3 absolute top-0.5 right-0.5 text-emerald-600" />
+                                <Lock className="w-2 h-2 sm:w-3 sm:h-3 absolute top-0.5 right-0.5 text-emerald-600" />
                               )}
                               {isSelected && !isLocked && (
                                 <button
@@ -269,7 +269,7 @@ function SuperBowlSquaresContent() {
                                   }}
                                   className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-0.5"
                                 >
-                                  <X className="w-3 h-3" />
+                                  <X className="w-2 h-2 sm:w-3 sm:h-3" />
                                 </button>
                               )}
                             </td>
