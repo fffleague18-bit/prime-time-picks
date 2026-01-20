@@ -46,10 +46,10 @@ function SuperBowlAdminContent() {
 
       setSquares(squaresData);
       setPayouts(payoutsData.length > 0 ? payoutsData : [
-        { quarter: '1st Quarter', amount: 125, description: '1st Quarter' },
-        { quarter: 'Halftime', amount: 125, description: 'Halftime' },
+        { quarter: 'Final Score', amount: 125, description: 'Final Score' },
         { quarter: '3rd Quarter', amount: 125, description: '3rd Quarter' },
-        { quarter: 'Final Score', amount: 125, description: 'Final Score' }
+        { quarter: 'Halftime', amount: 125, description: 'Halftime' },
+        { quarter: '1st Quarter', amount: 125, description: '1st Quarter' }
       ]);
     } catch (err) {
       console.error(err);
@@ -149,8 +149,8 @@ function SuperBowlAdminContent() {
     }
   };
 
-  const updatePayout = (quarter, field, value) => {
-    setPayouts(payouts.map(p => p.quarter === quarter ? { ...p, [field]: value } : p));
+  const updatePayout = (index, field, value) => {
+    setPayouts(payouts.map((p, i) => i === index ? { ...p, [field]: value } : p));
   };
 
   const handleDeleteSquare = async (squareId) => {
@@ -269,11 +269,11 @@ function SuperBowlAdminContent() {
             <CardTitle>Payouts</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {payouts.map(p => (
-              <div key={p.quarter} className="grid grid-cols-3 gap-4">
-                <Input value={p.quarter} onChange={(e) => updatePayout(p.quarter, 'quarter', e.target.value)} placeholder="Quarter" />
-                <Input type="number" value={p.amount} onChange={(e) => updatePayout(p.quarter, 'amount', e.target.value)} placeholder="Amount" />
-                <Input value={p.description || ''} onChange={(e) => updatePayout(p.quarter, 'description', e.target.value)} placeholder="Description" />
+            {payouts.map((p, index) => (
+              <div key={index} className="grid grid-cols-3 gap-4">
+                <Input value={p.quarter} onChange={(e) => updatePayout(index, 'quarter', e.target.value)} placeholder="Quarter" />
+                <Input type="number" value={p.amount} onChange={(e) => updatePayout(index, 'amount', e.target.value)} placeholder="Amount" />
+                <Input value={p.description || ''} onChange={(e) => updatePayout(index, 'description', e.target.value)} placeholder="Description" />
               </div>
             ))}
             <Button onClick={handleSavePayouts} className="bg-emerald-500 hover:bg-emerald-600">
