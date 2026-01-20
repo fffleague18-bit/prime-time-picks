@@ -271,13 +271,56 @@ function SuperBowlAdminContent() {
             <CardTitle>Payouts</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            {payouts.map((p, index) => (
-              <div key={index} className="grid grid-cols-3 gap-4">
-                <Input value={p.quarter} onChange={(e) => updatePayout(index, 'quarter', e.target.value)} placeholder="Quarter" />
-                <Input type="number" value={p.amount} onChange={(e) => updatePayout(index, 'amount', e.target.value)} placeholder="Amount" />
-                <Input value={p.winner_name || ''} onChange={(e) => updatePayout(index, 'winner_name', e.target.value)} placeholder="Winner Name" />
-              </div>
-            ))}
+            <div className="grid grid-cols-4 gap-4 font-semibold text-sm text-slate-600 mb-2">
+              <div>Quarter</div>
+              <div>Amount</div>
+              <div>Score</div>
+              <div>Winner Name</div>
+            </div>
+            {payouts.map((p, index) => {
+              const winnerSquare = p.score ? squares.find(s => {
+                if (!settings?.home_numbers || !settings?.away_numbers || !s.is_locked) return false;
+                const homeDigit = settings.home_numbers[s.col];
+                const awayDigit = settings.away_numbers[s.row];
+                const [awayScore, homeScore] = p.score.split('-').map(n => parseInt(n));
+                return (homeScore % 10 === homeDigit && awayScore % 10 === awayDigit);
+              }) : null;
+
+              return (
+                <div key={index} className={`grid grid-cols-4 gap-4 p-2 rounded ${winnerSquare ? 'bg-yellow-50 border border-yellow-300' : ''}`}>
+                  <Input value={p.quarter} onChange={(e) => updatePayout(index, 'quarter', e.target.value)} placeholder="Quarter" />
+                  <Input type="number" value={p.amount} onChange={(e) => updatePayout(index, 'amount', e.target.value)} placeholder="Amount" />
+                  <Input 
+                    value={p.score || ''} 
+                    onChange={(e) => {
+                      updatePayout(index, 'score', e.target.value);
+                      // Auto-populate winner name when score is entered
+                      if (e.target.value && e.target.value.includes('-')) {
+                        const [awayScore, homeScore] = e.target.value.split('-').map(n => parseInt(n));
+                        if (!isNaN(awayScore) && !isNaN(homeScore)) {
+                          const winner = squares.find(s => {
+                            if (!settings?.home_numbers || !settings?.away_numbers || !s.is_locked) return false;
+                            const homeDigit = settings.home_numbers[s.col];
+                            const awayDigit = settings.away_numbers[s.row];
+                            return (homeScore % 10 === homeDigit && awayScore % 10 === awayDigit);
+                          });
+                          if (winner) {
+                            updatePayout(index, 'winner_name', winner.player_name);
+                          }
+                        }
+                      }
+                    }} 
+                    placeholder="e.g., 14-10" 
+                  />
+                  <Input 
+                    value={p.winner_name || ''} 
+                    onChange={(e) => updatePayout(index, 'winner_name', e.target.value)} 
+                    placeholder="Winner Name"
+                    className={winnerSquare ? 'font-semibold' : ''}
+                  />
+                </div>
+              );
+            })}
             <Button onClick={handleSavePayouts} className="bg-emerald-500 hover:bg-emerald-600">
               <Save className="w-4 h-4 mr-2" />
               Save Payouts
