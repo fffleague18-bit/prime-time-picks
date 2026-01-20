@@ -192,13 +192,12 @@ function SuperBowlSquaresContent() {
                         <div className="flex items-center justify-center gap-2">
                           <TeamIcon icon={settings?.home_team_icon} name={settings?.home_team_name} />
                           <span>{settings?.home_team_name || 'Home Team'}</span>
-                          <span>→</span>
                         </div>
                       </td>
                     </tr>
                     <tr>
                       <td className="w-12 h-12"></td>
-                      {(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9]).map((num, i) => (
+                      {[...(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])].slice(1).concat((settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[0]).map((num, i) => (
                         <td key={i} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
                           {num}
                         </td>
@@ -211,7 +210,6 @@ function SuperBowlSquaresContent() {
                             <div className="flex items-center justify-center gap-2" style={{writingMode: 'vertical-lr'}}>
                               <TeamIcon icon={settings?.away_team_icon} name={settings?.away_team_name} />
                               <span className="font-bold">{settings?.away_team_name || 'Away Team'}</span>
-                              <span>→</span>
                             </div>
                           </td>
                         )}
