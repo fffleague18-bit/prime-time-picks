@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { isAfter, format } from 'date-fns';
 import { Game } from "@/entities/Game";
@@ -213,6 +212,7 @@ function GamesContent() {
           <div className="space-y-4">
             {thisWeekGames.length > 0 ? thisWeekGames.map(game => {
               const cardColor = gameTypeColors[game.game_type] || gameTypeColors.Default;
+              const isSuperBowl = game.game_type?.toLowerCase().includes('super bowl');
               
               let spreadDisplay;
               if (game.spread < 0) {
@@ -237,6 +237,11 @@ function GamesContent() {
                   <div className="text-sm text-slate-600 bg-slate-100 p-2 rounded-md mt-3">
                     <span className="font-semibold">Spread:</span> {spreadDisplay} | <span className="font-semibold">Over/Under:</span> {game.over_under}
                   </div>
+                  {isSuperBowl && (
+                    <div className="mt-3 text-sm text-slate-700 bg-yellow-50 border border-yellow-200 p-2 rounded-md">
+                      ⚡ <span className="font-semibold">Tiebreaker:</span> Submit your total game score guess when making your prediction
+                    </div>
+                  )}
                 </Card>
               )
             }) : <p className="text-slate-500">No games scheduled for this week.</p>}
