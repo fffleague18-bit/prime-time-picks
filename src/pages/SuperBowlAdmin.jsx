@@ -129,20 +129,18 @@ function SuperBowlAdminContent() {
   const handleSavePayouts = async () => {
     try {
       for (const payout of payouts) {
+        const data = {
+          quarter: payout.quarter,
+          amount: parseFloat(payout.amount),
+          score: payout.score || null,
+          winner_name: payout.winner_name || null,
+          description: payout.description
+        };
+        
         if (payout.id) {
-          await base44.entities.SuperBowlPayout.update(payout.id, {
-            quarter: payout.quarter,
-            amount: parseFloat(payout.amount),
-            winner_name: payout.winner_name || null,
-            description: payout.description
-          });
+          await base44.entities.SuperBowlPayout.update(payout.id, data);
         } else {
-          await base44.entities.SuperBowlPayout.create({
-            quarter: payout.quarter,
-            amount: parseFloat(payout.amount),
-            winner_name: payout.winner_name || null,
-            description: payout.description
-          });
+          await base44.entities.SuperBowlPayout.create(data);
         }
       }
       await loadData();
