@@ -56,6 +56,20 @@ function SuperBowlSquaresContent() {
 
   useEffect(() => {
     loadData();
+
+    // Subscribe to real-time updates
+    const unsubscribe = base44.entities.SuperBowlSquare.subscribe((event) => {
+      if (event.type === 'create' || event.type === 'update') {
+        setSquares(prev => {
+          const filtered = prev.filter(s => s.id !== event.id);
+          return [...filtered, event.data];
+        });
+      } else if (event.type === 'delete') {
+        setSquares(prev => prev.filter(s => s.id !== event.id));
+      }
+    });
+
+    return () => unsubscribe();
   }, []);
 
   const loadData = async () => {
