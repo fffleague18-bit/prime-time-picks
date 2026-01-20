@@ -47,12 +47,12 @@ function SuperBowlSquaresContent() {
 
   const getColorForName = (name) => {
     if (!name) return colors[0];
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-      hash = ((hash << 5) - hash) + name.charCodeAt(i);
-      hash = hash & hash; // Convert to 32bit integer
-    }
-    return colors[Math.abs(hash) % colors.length];
+    
+    // Get all unique player names and sort them consistently
+    const uniqueNames = [...new Set(squares.map(s => s.player_name).filter(Boolean))].sort();
+    const index = uniqueNames.indexOf(name);
+    
+    return colors[index % colors.length];
   };
 
   useEffect(() => {
