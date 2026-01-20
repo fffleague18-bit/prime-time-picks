@@ -16,7 +16,6 @@ function SuperBowlSquaresContent() {
   const [selectedSquares, setSelectedSquares] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [customName, setCustomName] = useState('');
-  const [tiebreakerGuess, setTiebreakerGuess] = useState('');
 
   const colors = [
     { bg: 'bg-red-300', border: 'border-red-500', text: 'text-red-950' },
@@ -115,44 +114,38 @@ function SuperBowlSquaresContent() {
   };
 
   const handleSubmit = async () => {
-    if (selectedSquares.length === 0) return;
-    if (!customName.trim()) {
-      alert('Please enter a name for the squares');
-      return;
-    }
-    if (!tiebreakerGuess || tiebreakerGuess < 0) {
-      alert('Please enter a valid tiebreaker guess (total game score)');
-      return;
-    }
-
-    try {
-      for (const sq of selectedSquares) {
-        const existing = getSquareData(sq.row, sq.col);
-        const data = {
-          row: sq.row,
-          col: sq.col,
-          player_id: currentUser.id,
-          player_name: customName.trim(),
-          player_icon: currentUser.icon,
-          is_locked: true,
-          tiebreaker_guess: parseInt(tiebreakerGuess)
-        };
-
-        if (existing) {
-          await base44.entities.SuperBowlSquare.update(existing.id, data);
-        } else {
-          await base44.entities.SuperBowlSquare.create(data);
-        }
+      if (selectedSquares.length === 0) return;
+      if (!customName.trim()) {
+        alert('Please enter a name for the squares');
+        return;
       }
 
-      setSelectedSquares([]);
-      setCustomName('');
-      setTiebreakerGuess('');
-      await loadData();
-    } catch (err) {
-      console.error(err);
-    }
-  };
+      try {
+        for (const sq of selectedSquares) {
+          const existing = getSquareData(sq.row, sq.col);
+          const data = {
+            row: sq.row,
+            col: sq.col,
+            player_id: currentUser.id,
+            player_name: customName.trim(),
+            player_icon: currentUser.icon,
+            is_locked: true
+          };
+
+          if (existing) {
+            await base44.entities.SuperBowlSquare.update(existing.id, data);
+          } else {
+            await base44.entities.SuperBowlSquare.create(data);
+          }
+        }
+
+        setSelectedSquares([]);
+        setCustomName('');
+        await loadData();
+      } catch (err) {
+        console.error(err);
+      }
+    };
 
   const handleRemoveSquare = (row, col) => {
     setSelectedSquares(selectedSquares.filter(s => !(s.row === row && s.col === col)));
@@ -246,18 +239,6 @@ function SuperBowlSquaresContent() {
                       onChange={(e) => setCustomName(e.target.value)}
                       className="w-full"
                     />
-                  </div>
-                  <div>
-                    <label className="text-sm font-medium text-slate-700 mb-1 block">Tiebreaker: Total Game Score Guess</label>
-                    <Input
-                      type="number"
-                      placeholder="Enter total score (e.g., 48)"
-                      value={tiebreakerGuess}
-                      onChange={(e) => setTiebreakerGuess(e.target.value)}
-                      className="w-full"
-                      min="0"
-                    />
-                    <p className="text-xs text-slate-500 mt-1">Closest guess wins the tiebreaker</p>
                   </div>
                   <Button onClick={handleSubmit} className="w-full bg-emerald-500 hover:bg-emerald-600">
                     Submit & Lock Squares
