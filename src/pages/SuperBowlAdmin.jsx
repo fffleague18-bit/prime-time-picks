@@ -133,12 +133,14 @@ function SuperBowlAdminContent() {
           await base44.entities.SuperBowlPayout.update(payout.id, {
             quarter: payout.quarter,
             amount: parseFloat(payout.amount),
+            winner_name: payout.winner_name || null,
             description: payout.description
           });
         } else {
           await base44.entities.SuperBowlPayout.create({
             quarter: payout.quarter,
             amount: parseFloat(payout.amount),
+            winner_name: payout.winner_name || null,
             description: payout.description
           });
         }
@@ -273,7 +275,7 @@ function SuperBowlAdminContent() {
               <div key={index} className="grid grid-cols-3 gap-4">
                 <Input value={p.quarter} onChange={(e) => updatePayout(index, 'quarter', e.target.value)} placeholder="Quarter" />
                 <Input type="number" value={p.amount} onChange={(e) => updatePayout(index, 'amount', e.target.value)} placeholder="Amount" />
-                <Input value={p.description || ''} onChange={(e) => updatePayout(index, 'description', e.target.value)} placeholder="Description" />
+                <Input value={p.winner_name || ''} onChange={(e) => updatePayout(index, 'winner_name', e.target.value)} placeholder="Winner Name" />
               </div>
             ))}
             <Button onClick={handleSavePayouts} className="bg-emerald-500 hover:bg-emerald-600">
