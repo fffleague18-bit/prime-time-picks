@@ -217,7 +217,7 @@ function SuperBowlSquaresContent() {
                       <td className="w-12 h-12"></td>
                       {[0,1,2,3,4,5,6,7,8,9].map((col) => (
                         <td key={col} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
-                          {(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[col]}
+                          {settings?.game_started ? (settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[col] : '?'}
                         </td>
                       ))}
                     </tr>
@@ -232,7 +232,7 @@ function SuperBowlSquaresContent() {
                           </td>
                         )}
                         <td className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
-                          {(settings?.away_numbers || [0,1,2,3,4,5,6,7,8,9])[row]}
+                          {settings?.game_started ? (settings?.away_numbers || [0,1,2,3,4,5,6,7,8,9])[row] : '?'}
                         </td>
                         {[0,1,2,3,4,5,6,7,8,9].map((col) => {
                           const square = getSquareData(row, col);

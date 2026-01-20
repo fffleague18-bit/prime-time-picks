@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Upload, Shuffle, Save, Trash2 } from "lucide-react";
+import { Upload, Shuffle, Save, Trash2, Play } from "lucide-react";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
 
 function SuperBowlAdminContent() {
@@ -225,16 +225,40 @@ function SuperBowlAdminContent() {
               </div>
             </div>
 
-            <div className="flex gap-3">
+            <div className="flex gap-3 flex-wrap">
               <Button onClick={handleSaveSettings} className="bg-emerald-500 hover:bg-emerald-600">
                 <Save className="w-4 h-4 mr-2" />
                 Save Settings
               </Button>
               {settings && (
-                <Button onClick={handleShuffleNumbers} variant="outline">
-                  <Shuffle className="w-4 h-4 mr-2" />
-                  Shuffle Numbers
-                </Button>
+                <>
+                  <Button onClick={handleShuffleNumbers} variant="outline">
+                    <Shuffle className="w-4 h-4 mr-2" />
+                    Shuffle Numbers
+                  </Button>
+                  <Button 
+                    onClick={async () => {
+                      await base44.entities.SuperBowlSettings.update(settings.id, { game_started: !settings.game_started });
+                      await loadData();
+                    }}
+                    variant={settings.game_started ? "destructive" : "default"}
+                  >
+                    {settings.game_started ? "Hide Numbers" : "Start Game (Show Numbers)"}
+                  </Button>
+                  <Button 
+                    onClick={async () => {
+                      if (!confirm('This will delete ALL squares. Continue?')) return;
+                      for (const sq of squares) {
+                        await base44.entities.SuperBowlSquare.delete(sq.id);
+                      }
+                      await loadData();
+                    }}
+                    variant="destructive"
+                  >
+                    <Trash2 className="w-4 h-4 mr-2" />
+                    Reset All Squares
+                  </Button>
+                </>
               )}
             </div>
           </CardContent>
