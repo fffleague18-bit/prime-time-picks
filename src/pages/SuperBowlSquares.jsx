@@ -254,8 +254,8 @@ function SuperBowlSquaresContent() {
                               }`}
                             >
                               {square?.player_name && (
-                                <div className="absolute inset-0 flex items-center justify-center p-0.5">
-                                  <span className="text-[9px] font-bold text-center leading-tight break-all">{square.player_name}</span>
+                                <div className="absolute inset-0 flex items-center justify-center p-1">
+                                  <span className="text-[8px] font-bold text-center leading-[1.1] break-words overflow-hidden">{square.player_name}</span>
                                 </div>
                               )}
                               {isLocked && isMine && (
