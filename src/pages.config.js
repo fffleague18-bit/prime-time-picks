@@ -13,8 +13,8 @@ import PrizeManagement from './pages/PrizeManagement';
 import Profile from './pages/Profile';
 import Results from './pages/Results';
 import SuperAdminSetup from './pages/SuperAdminSetup';
-import SuperBowlSquares from './pages/SuperBowlSquares';
 import SuperBowlAdmin from './pages/SuperBowlAdmin';
+import SuperBowlSquares from './pages/SuperBowlSquares';
 import __Layout from './Layout.jsx';
 
 
@@ -34,8 +34,8 @@ export const PAGES = {
     "Profile": Profile,
     "Results": Results,
     "SuperAdminSetup": SuperAdminSetup,
-    "SuperBowlSquares": SuperBowlSquares,
     "SuperBowlAdmin": SuperBowlAdmin,
+    "SuperBowlSquares": SuperBowlSquares,
 }
 
 export const pagesConfig = {

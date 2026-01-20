@@ -104,6 +104,12 @@ function SuperBowlSquaresContent() {
     return <span className="text-2xl">{icon || '🏈'}</span>;
   };
 
+  // Helper to reorder columns: move 0 to the end
+  const reorderedColumns = [1,2,3,4,5,6,7,8,9,0];
+  const getDisplayNumber = (numbers, col) => {
+    return numbers[col];
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
