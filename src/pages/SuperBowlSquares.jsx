@@ -216,7 +216,7 @@ function SuperBowlSquaresContent() {
                         <td className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
                           {(settings?.away_numbers || [0,1,2,3,4,5,6,7,8,9])[row]}
                         </td>
-                        {[0,1,2,3,4,5,6,7,8,9].map((col) => {
+                        {[1,2,3,4,5,6,7,8,9,0].map((col) => {
                           const square = getSquareData(row, col);
                           const isSelected = selectedSquares.some(s => s.row === row && s.col === col);
                           const isMine = square?.player_id === currentUser?.id;
