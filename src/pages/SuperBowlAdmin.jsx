@@ -46,10 +46,10 @@ function SuperBowlAdminContent() {
 
       setSquares(squaresData);
       setPayouts(payoutsData.length > 0 ? payoutsData : [
-        { quarter: 'Q1', amount: 125, description: '1st Quarter' },
-        { quarter: 'Q2', amount: 125, description: '2nd Quarter' },
-        { quarter: 'Q3', amount: 125, description: '3rd Quarter' },
-        { quarter: 'Final', amount: 125, description: 'Final Score' }
+        { quarter: '1st Quarter', amount: 125, description: '1st Quarter' },
+        { quarter: 'Halftime', amount: 125, description: 'Halftime' },
+        { quarter: '3rd Quarter', amount: 125, description: '3rd Quarter' },
+        { quarter: 'Final Score', amount: 125, description: 'Final Score' }
       ]);
     } catch (err) {
       console.error(err);
