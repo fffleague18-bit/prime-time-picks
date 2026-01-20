@@ -211,8 +211,9 @@ function SuperBowlSquaresContent() {
                 const order = { '1st Quarter': 1, 'Halftime': 2, '3rd Quarter': 3, 'Final Score': 4 };
                 return order[a.quarter] - order[b.quarter];
               }).map(p => (
-                <div key={p.id} className="flex justify-between text-sm">
-                  <span>{p.quarter}:</span>
+                <div key={p.id} className="flex justify-between items-center text-sm gap-2">
+                  <span className="flex-1">{p.quarter}:</span>
+                  {p.winner_name && <span className="text-emerald-600 font-medium">{p.winner_name}</span>}
                   <span className="font-bold">${p.amount}</span>
                 </div>
               ))}
