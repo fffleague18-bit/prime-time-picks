@@ -18,16 +18,18 @@ function SuperBowlSquaresContent() {
   const [customName, setCustomName] = useState('');
 
   const colors = [
-    { bg: 'bg-red-100', border: 'border-red-300', text: 'text-red-900' },
-    { bg: 'bg-blue-100', border: 'border-blue-300', text: 'text-blue-900' },
-    { bg: 'bg-green-100', border: 'border-green-300', text: 'text-green-900' },
-    { bg: 'bg-yellow-100', border: 'border-yellow-300', text: 'text-yellow-900' },
-    { bg: 'bg-purple-100', border: 'border-purple-300', text: 'text-purple-900' },
-    { bg: 'bg-pink-100', border: 'border-pink-300', text: 'text-pink-900' },
-    { bg: 'bg-orange-100', border: 'border-orange-300', text: 'text-orange-900' },
-    { bg: 'bg-teal-100', border: 'border-teal-300', text: 'text-teal-900' },
-    { bg: 'bg-indigo-100', border: 'border-indigo-300', text: 'text-indigo-900' },
-    { bg: 'bg-cyan-100', border: 'border-cyan-300', text: 'text-cyan-900' },
+    { bg: 'bg-red-200', border: 'border-red-400', text: 'text-red-950' },
+    { bg: 'bg-blue-200', border: 'border-blue-400', text: 'text-blue-950' },
+    { bg: 'bg-green-200', border: 'border-green-400', text: 'text-green-950' },
+    { bg: 'bg-amber-200', border: 'border-amber-400', text: 'text-amber-950' },
+    { bg: 'bg-purple-200', border: 'border-purple-400', text: 'text-purple-950' },
+    { bg: 'bg-pink-200', border: 'border-pink-400', text: 'text-pink-950' },
+    { bg: 'bg-orange-200', border: 'border-orange-400', text: 'text-orange-950' },
+    { bg: 'bg-teal-200', border: 'border-teal-400', text: 'text-teal-950' },
+    { bg: 'bg-indigo-200', border: 'border-indigo-400', text: 'text-indigo-950' },
+    { bg: 'bg-cyan-200', border: 'border-cyan-400', text: 'text-cyan-950' },
+    { bg: 'bg-rose-200', border: 'border-rose-400', text: 'text-rose-950' },
+    { bg: 'bg-lime-200', border: 'border-lime-400', text: 'text-lime-950' },
   ];
 
   const getColorForName = (name) => {
