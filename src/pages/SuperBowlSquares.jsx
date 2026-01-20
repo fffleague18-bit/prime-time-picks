@@ -197,9 +197,9 @@ function SuperBowlSquaresContent() {
                     </tr>
                     <tr>
                       <td className="w-12 h-12"></td>
-                      {[...(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])].slice(1).concat((settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[0]).map((num, i) => (
-                        <td key={i} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
-                          {num}
+                      {[1,2,3,4,5,6,7,8,9,0].map((colIndex) => (
+                        <td key={colIndex} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
+                          {(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[colIndex]}
                         </td>
                       ))}
                     </tr>
