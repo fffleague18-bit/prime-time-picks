@@ -157,7 +157,7 @@ function SuperBowlSquaresContent() {
             </CardHeader>
             <CardContent className="space-y-2">
               {payouts.sort((a, b) => {
-                const order = { 'Final Score': 1, '3rd Quarter': 2, 'Halftime': 3, '1st Quarter': 4 };
+                const order = { '1st Quarter': 1, 'Halftime': 2, '3rd Quarter': 3, 'Final Score': 4 };
                 return order[a.quarter] - order[b.quarter];
               }).map(p => (
                 <div key={p.id} className="flex justify-between text-sm">
