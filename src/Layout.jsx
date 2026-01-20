@@ -56,8 +56,8 @@ export default function Layout({ children }) {
   const navigationItems = [
     { href: createPageUrl("Dashboard"), icon: Home, label: "Dashboard" },
     { href: createPageUrl("Games"), icon: Calendar, label: "Games" },
-    { href: createPageUrl("SuperBowlSquares"), icon: Trophy, label: "Super Bowl Squares" },
     { href: createPageUrl("Results"), icon: BarChart3, label: "Results" },
+    { href: createPageUrl("SuperBowlSquares"), icon: Trophy, label: "Super Bowl Squares" },
     { href: createPageUrl("Chat"), icon: MessageCircle, label: "Chat", showDot: hasUnreadMessages },
     { href: createPageUrl("Assistant"), icon: Bot, label: "Assistant" },
     { href: createPageUrl("Profile"), icon: UserIcon, label: "Profile" },
