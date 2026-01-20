@@ -188,6 +188,7 @@ function SuperBowlSquaresContent() {
                   <tbody>
                     <tr>
                       <td className="w-12 h-12"></td>
+                      <td className="w-12 h-12"></td>
                       <td className="text-center font-bold p-2" colSpan={10}>
                         <div className="flex items-center justify-center gap-2">
                           <TeamIcon icon={settings?.home_team_icon} name={settings?.home_team_name} />
@@ -196,6 +197,7 @@ function SuperBowlSquaresContent() {
                       </td>
                     </tr>
                     <tr>
+                      <td className="w-12 h-12"></td>
                       <td className="w-12 h-12"></td>
                       {[0,1,2,3,4,5,6,7,8,9].map((col) => (
                         <td key={col} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
