@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Game } from "@/entities/Game";
+import { base44 } from "@/api/base44Client";
 import { UploadFile } from "@/integrations/Core";
 import AuthWrapper from "../components/auth/AuthWrapper";
 import AdminAuthWrapper from "../components/auth/AdminAuthWrapper";
@@ -70,12 +71,17 @@ function GameManagementContent() {
   const [finalizingGame, setFinalizingGame] = useState(null);
   const [isSubmittingScore, setIsSubmittingScore] = useState(false);
   const [isRecalculating, setIsRecalculating] = useState(false);
+  const [superBowlSquares, setSuperBowlSquares] = useState([]);
 
   const loadGames = useCallback(async () => {
     setIsLoading(true);
     try {
       const gameData = await Game.list('game_date', 2000);
       setGames(gameData);
+      
+      // Load Super Bowl squares
+      const squaresData = await base44.entities.SuperBowlSquare.list();
+      setSuperBowlSquares(squaresData);
     } catch (err) {
       setError("Failed to load games.");
       console.error(err);
@@ -392,6 +398,23 @@ function GameManagementContent() {
     const gameDateUTC = parseGameDateAsUTC(game.game_date);
     const displayDate = format(gameDateUTC, 'EEE, MMM d, yyyy h:mm a');
     
+    const isSuperBowl = game.game_type?.toLowerCase().includes('super bowl');
+    const lockedSquares = superBowlSquares.filter(s => s.is_locked);
+    
+    // Group squares by player and calculate tiebreaker differences
+    const playerSquares = {};
+    lockedSquares.forEach(square => {
+      if (!playerSquares[square.player_id]) {
+        playerSquares[square.player_id] = {
+          name: square.player_name,
+          icon: square.player_icon,
+          squares: [],
+          tiebreaker_guess: square.tiebreaker_guess
+        };
+      }
+      playerSquares[square.player_id].squares.push({ row: square.row, col: square.col });
+    });
+    
     return (
       <Card key={game.id}>
         <CardContent className="p-6">
@@ -484,6 +507,46 @@ function GameManagementContent() {
               </div>
             )}
           </div>
+
+          {isSuperBowl && Object.keys(playerSquares).length > 0 && (
+            <div className="mt-4 border-t pt-4">
+              <h4 className="font-semibold mb-3">Player Picks & Tiebreaker Guesses</h4>
+              <div className="space-y-2 max-h-64 overflow-y-auto">
+                {Object.values(playerSquares).sort((a, b) => {
+                  if (!game.total_points) return 0;
+                  const diffA = Math.abs((a.tiebreaker_guess || 0) - game.total_points);
+                  const diffB = Math.abs((b.tiebreaker_guess || 0) - game.total_points);
+                  return diffA - diffB;
+                }).map((player, idx) => {
+                  const diff = game.total_points ? Math.abs((player.tiebreaker_guess || 0) - game.total_points) : null;
+                  const isWinner = game.winning_tiebreaker_guess && player.tiebreaker_guess === game.winning_tiebreaker_guess;
+                  
+                  return (
+                    <div key={idx} className={`flex items-center justify-between p-2 rounded ${isWinner ? 'bg-yellow-50 border border-yellow-300' : 'bg-white'}`}>
+                      <div className="flex items-center gap-2">
+                        {player.icon && <img src={player.icon} alt={player.name} className="w-6 h-6 rounded-full" />}
+                        <span className="font-medium">{player.name}</span>
+                        <span className="text-slate-500 text-sm">({player.squares.length} {player.squares.length === 1 ? 'square' : 'squares'})</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm">
+                          Guess: <span className="font-semibold">{player.tiebreaker_guess || 'N/A'}</span>
+                        </span>
+                        {diff !== null && (
+                          <span className="text-xs text-slate-500">
+                            (off by {diff})
+                          </span>
+                        )}
+                        {isWinner && (
+                          <Badge className="bg-yellow-500 text-white">Winner</Badge>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     );
