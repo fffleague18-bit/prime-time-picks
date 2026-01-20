@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Trophy, DollarSign, Lock, X } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
 
 function SuperBowlSquaresContent() {
@@ -14,6 +15,7 @@ function SuperBowlSquaresContent() {
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedSquares, setSelectedSquares] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [customName, setCustomName] = useState('');
 
   useEffect(() => {
     loadData();
@@ -61,6 +63,10 @@ function SuperBowlSquaresContent() {
 
   const handleSubmit = async () => {
     if (selectedSquares.length === 0) return;
+    if (!customName.trim()) {
+      alert('Please enter a name for the squares');
+      return;
+    }
 
     try {
       for (const sq of selectedSquares) {
@@ -69,7 +75,7 @@ function SuperBowlSquaresContent() {
           row: sq.row,
           col: sq.col,
           player_id: currentUser.id,
-          player_name: currentUser.display_name || currentUser.full_name,
+          player_name: customName.trim(),
           player_icon: currentUser.icon,
           is_locked: true
         };
@@ -82,6 +88,7 @@ function SuperBowlSquaresContent() {
       }
 
       setSelectedSquares([]);
+      setCustomName('');
       await loadData();
     } catch (err) {
       console.error(err);
@@ -169,8 +176,17 @@ function SuperBowlSquaresContent() {
               {selectedSquares.length === 0 ? (
                 <p className="text-sm text-slate-500">Click squares to select</p>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <p className="text-sm font-semibold">{selectedSquares.length} squares - ${selectedSquares.length * 5}</p>
+                  <div>
+                    <label className="text-sm font-medium text-slate-700 mb-1 block">Name for squares</label>
+                    <Input
+                      placeholder="Enter name"
+                      value={customName}
+                      onChange={(e) => setCustomName(e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
                   <Button onClick={handleSubmit} className="w-full bg-emerald-500 hover:bg-emerald-600">
                     Submit & Lock Squares
                   </Button>
