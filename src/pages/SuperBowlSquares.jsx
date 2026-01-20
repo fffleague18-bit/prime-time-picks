@@ -104,12 +104,6 @@ function SuperBowlSquaresContent() {
     return <span className="text-2xl">{icon || '🏈'}</span>;
   };
 
-  // Helper to reorder columns: move 0 to the end
-  const reorderedColumns = [1,2,3,4,5,6,7,8,9,0];
-  const getDisplayNumber = (numbers, col) => {
-    return numbers[col];
-  };
-
   return (
     <div className="min-h-screen bg-slate-50 p-4 sm:p-8">
       <div className="max-w-7xl mx-auto">
@@ -203,9 +197,9 @@ function SuperBowlSquaresContent() {
                     </tr>
                     <tr>
                       <td className="w-12 h-12"></td>
-                      {reorderedColumns.map((col) => (
+                      {[0,1,2,3,4,5,6,7,8,9].map((col) => (
                         <td key={col} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
-                          {getDisplayNumber(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9], col)}
+                          {(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[col]}
                         </td>
                       ))}
                     </tr>
@@ -222,7 +216,7 @@ function SuperBowlSquaresContent() {
                         <td className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
                           {(settings?.away_numbers || [0,1,2,3,4,5,6,7,8,9])[row]}
                         </td>
-                        {reorderedColumns.map((col) => {
+                        {[0,1,2,3,4,5,6,7,8,9].map((col) => {
                           const square = getSquareData(row, col);
                           const isSelected = selectedSquares.some(s => s.row === row && s.col === col);
                           const isMine = square?.player_id === currentUser?.id;
