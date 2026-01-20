@@ -17,6 +17,28 @@ function SuperBowlSquaresContent() {
   const [isLoading, setIsLoading] = useState(true);
   const [customName, setCustomName] = useState('');
 
+  const colors = [
+    { bg: 'bg-red-100', border: 'border-red-300', text: 'text-red-900' },
+    { bg: 'bg-blue-100', border: 'border-blue-300', text: 'text-blue-900' },
+    { bg: 'bg-green-100', border: 'border-green-300', text: 'text-green-900' },
+    { bg: 'bg-yellow-100', border: 'border-yellow-300', text: 'text-yellow-900' },
+    { bg: 'bg-purple-100', border: 'border-purple-300', text: 'text-purple-900' },
+    { bg: 'bg-pink-100', border: 'border-pink-300', text: 'text-pink-900' },
+    { bg: 'bg-orange-100', border: 'border-orange-300', text: 'text-orange-900' },
+    { bg: 'bg-teal-100', border: 'border-teal-300', text: 'text-teal-900' },
+    { bg: 'bg-indigo-100', border: 'border-indigo-300', text: 'text-indigo-900' },
+    { bg: 'bg-cyan-100', border: 'border-cyan-300', text: 'text-cyan-900' },
+  ];
+
+  const getColorForName = (name) => {
+    if (!name) return colors[0];
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return colors[Math.abs(hash) % colors.length];
+  };
+
   useEffect(() => {
     loadData();
   }, []);
@@ -240,22 +262,22 @@ function SuperBowlSquaresContent() {
                           const isMine = square?.player_id === currentUser?.id;
                           const isLocked = square?.is_locked;
                           const isOccupied = square?.player_id && square.player_id !== currentUser?.id;
+                          const playerColor = square?.player_name ? getColorForName(square.player_name) : null;
 
                           return (
                             <td
                               key={col}
                               onClick={() => !isOccupied && !isLocked && handleSquareClick(row, col)}
-                              className={`w-8 h-8 sm:w-12 sm:h-12 border border-slate-300 relative cursor-pointer transition-all ${
-                                isOccupied ? 'bg-slate-200 cursor-not-allowed' :
-                                isLocked && isMine ? 'bg-emerald-100 cursor-not-allowed' :
-                                isSelected ? 'bg-blue-200' :
-                                isMine ? 'bg-blue-50 hover:bg-blue-100' :
-                                'bg-white hover:bg-slate-50'
+                              className={`w-8 h-8 sm:w-12 sm:h-12 border-2 relative cursor-pointer transition-all ${
+                                isSelected ? 'bg-blue-200 border-blue-400' :
+                                square?.player_name && isLocked ? `${playerColor.bg} ${playerColor.border} cursor-not-allowed` :
+                                square?.player_name && !isLocked ? `${playerColor.bg} ${playerColor.border} hover:opacity-80` :
+                                'bg-white border-slate-300 hover:bg-slate-50'
                               }`}
                             >
                               {square?.player_name && (
                                 <div className="absolute inset-0 flex items-center justify-center p-0.5 sm:p-1">
-                                  <span className="text-[6px] sm:text-[8px] font-bold text-center leading-[1.1] break-words overflow-hidden">{square.player_name}</span>
+                                  <span className={`text-[6px] sm:text-[8px] font-bold text-center leading-[1.1] break-words overflow-hidden ${playerColor?.text || ''}`}>{square.player_name}</span>
                                 </div>
                               )}
                               {isLocked && isMine && (
