@@ -203,9 +203,9 @@ function SuperBowlSquaresContent() {
                     </tr>
                     <tr>
                       <td className="w-12 h-12"></td>
-                      {[1,2,3,4,5,6,7,8,9,0].map((colIndex) => (
-                        <td key={colIndex} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
-                          {(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9])[colIndex]}
+                      {reorderedColumns.map((col) => (
+                        <td key={col} className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
+                          {getDisplayNumber(settings?.home_numbers || [0,1,2,3,4,5,6,7,8,9], col)}
                         </td>
                       ))}
                     </tr>
