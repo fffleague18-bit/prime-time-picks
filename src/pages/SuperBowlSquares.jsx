@@ -16,6 +16,7 @@ function SuperBowlSquaresContent() {
   const [selectedSquares, setSelectedSquares] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [customName, setCustomName] = useState('');
+  const [tiebreakerGuess, setTiebreakerGuess] = useState('');
 
   const colors = [
     { bg: 'bg-red-300', border: 'border-red-500', text: 'text-red-950' },
@@ -119,6 +120,10 @@ function SuperBowlSquaresContent() {
       alert('Please enter a name for the squares');
       return;
     }
+    if (!tiebreakerGuess || tiebreakerGuess < 0) {
+      alert('Please enter a valid tiebreaker guess (total game score)');
+      return;
+    }
 
     try {
       for (const sq of selectedSquares) {
@@ -129,7 +134,8 @@ function SuperBowlSquaresContent() {
           player_id: currentUser.id,
           player_name: customName.trim(),
           player_icon: currentUser.icon,
-          is_locked: true
+          is_locked: true,
+          tiebreaker_guess: parseInt(tiebreakerGuess)
         };
 
         if (existing) {
@@ -141,6 +147,7 @@ function SuperBowlSquaresContent() {
 
       setSelectedSquares([]);
       setCustomName('');
+      setTiebreakerGuess('');
       await loadData();
     } catch (err) {
       console.error(err);
@@ -239,6 +246,18 @@ function SuperBowlSquaresContent() {
                       onChange={(e) => setCustomName(e.target.value)}
                       className="w-full"
                     />
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-slate-700 mb-1 block">Tiebreaker: Total Game Score Guess</label>
+                    <Input
+                      type="number"
+                      placeholder="Enter total score (e.g., 48)"
+                      value={tiebreakerGuess}
+                      onChange={(e) => setTiebreakerGuess(e.target.value)}
+                      className="w-full"
+                      min="0"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">Closest guess wins the tiebreaker</p>
                   </div>
                   <Button onClick={handleSubmit} className="w-full bg-emerald-500 hover:bg-emerald-600">
                     Submit & Lock Squares
