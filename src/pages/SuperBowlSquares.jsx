@@ -189,7 +189,11 @@ function SuperBowlSquaresContent() {
                     <tr>
                       <td className="w-12 h-12"></td>
                       <td className="text-center font-bold p-2" colSpan={10}>
-                        {settings?.home_team_name || 'Home Team'} →
+                        <div className="flex items-center justify-center gap-2">
+                          <TeamIcon icon={settings?.home_team_icon} name={settings?.home_team_name} />
+                          <span>{settings?.home_team_name || 'Home Team'}</span>
+                          <span>→</span>
+                        </div>
                       </td>
                     </tr>
                     <tr>
@@ -203,8 +207,12 @@ function SuperBowlSquaresContent() {
                     {[0,1,2,3,4,5,6,7,8,9].map((row) => (
                       <tr key={row}>
                         {row === 0 && (
-                          <td rowSpan={10} className="text-center font-bold bg-slate-100 border border-slate-300 align-middle" style={{writingMode: 'vertical-rl', transform: 'rotate(180deg)'}}>
-                            ← {settings?.away_team_name || 'Away Team'}
+                          <td rowSpan={10} className="bg-slate-100 border border-slate-300 align-middle" style={{writingMode: 'vertical-rl', transform: 'rotate(180deg)'}}>
+                            <div className="flex items-center justify-center gap-2">
+                              <span>←</span>
+                              <span className="font-bold">{settings?.away_team_name || 'Away Team'}</span>
+                              <TeamIcon icon={settings?.away_team_icon} name={settings?.away_team_name} />
+                            </div>
                           </td>
                         )}
                         <td className="w-12 h-12 text-center font-bold bg-slate-100 border border-slate-300">
@@ -230,8 +238,9 @@ function SuperBowlSquaresContent() {
                               }`}
                             >
                               {square?.player_icon && (
-                                <div className="absolute inset-0 flex items-center justify-center">
-                                  <PlayerAvatar icon={square.player_icon} name={square.player_name} className="w-8 h-8" />
+                                <div className="absolute inset-0 flex flex-col items-center justify-center gap-0.5 p-1">
+                                  <PlayerAvatar icon={square.player_icon} name={square.player_name} className="w-6 h-6" />
+                                  <span className="text-[8px] font-semibold text-center leading-tight">{square.player_name}</span>
                                 </div>
                               )}
                               {isLocked && isMine && (
