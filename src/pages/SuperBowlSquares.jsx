@@ -49,7 +49,8 @@ function SuperBowlSquaresContent() {
     if (!name) return colors[0];
     let hash = 0;
     for (let i = 0; i < name.length; i++) {
-      hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      hash = ((hash << 5) - hash) + name.charCodeAt(i);
+      hash = hash & hash; // Convert to 32bit integer
     }
     return colors[Math.abs(hash) % colors.length];
   };
