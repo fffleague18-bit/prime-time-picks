@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { Game } from "@/entities/Game";
 import { UploadFile } from "@/integrations/Core";
@@ -64,7 +63,8 @@ function GameManagementContent() {
     is_active: false,
     prize_pool: '',
     away_score: '',
-    home_score: ''
+    home_score: '',
+    winning_tiebreaker_guess: ''
   });
   const [notificationGame, setNotificationGame] = useState(null);
   const [finalizingGame, setFinalizingGame] = useState(null);
@@ -103,7 +103,8 @@ function GameManagementContent() {
       is_active: false,
       prize_pool: '',
       away_score: '',
-      home_score: ''
+      home_score: '',
+      winning_tiebreaker_guess: ''
     });
     setEditingGame(null);
     setShowForm(false);
@@ -129,7 +130,8 @@ function GameManagementContent() {
       is_active: game.is_active || false,
       prize_pool: game.prize_pool || '',
       away_score: game.away_score ?? '', // Use nullish coalescing to handle 0 values correctly
-      home_score: game.home_score ?? '' // Use nullish coalescing to handle 0 values correctly
+      home_score: game.home_score ?? '', // Use nullish coalescing to handle 0 values correctly
+      winning_tiebreaker_guess: game.winning_tiebreaker_guess ?? ''
     });
     setEditingGame(game);
     setShowForm(true);
@@ -269,6 +271,9 @@ function GameManagementContent() {
       }
       if (payload.away_score !== undefined && payload.home_score !== undefined) {
         payload.total_points = payload.away_score + payload.home_score;
+      }
+      if (formData.winning_tiebreaker_guess !== '' && formData.winning_tiebreaker_guess !== null && !isNaN(parseInt(formData.winning_tiebreaker_guess))) {
+        payload.winning_tiebreaker_guess = parseInt(formData.winning_tiebreaker_guess);
       }
       
       if (editingGame) {
@@ -675,6 +680,20 @@ function GameManagementContent() {
                       <Label htmlFor="home_score">Home Team Score</Label>
                       <Input id="home_score" type="number" value={formData.home_score} onChange={(e) => setFormData({...formData, home_score: e.target.value})} />
                     </div>
+                  </div>
+                )}
+
+                {formData.game_type?.toLowerCase().includes('super bowl') && (
+                  <div>
+                    <Label htmlFor="winning_tiebreaker_guess">Winning Tiebreaker Guess (Closest Total Score)</Label>
+                    <Input 
+                      id="winning_tiebreaker_guess" 
+                      type="number" 
+                      value={formData.winning_tiebreaker_guess} 
+                      onChange={(e) => setFormData({...formData, winning_tiebreaker_guess: e.target.value})} 
+                      placeholder="Enter the winning tiebreaker guess"
+                    />
+                    <p className="text-xs text-slate-500 mt-1">The closest guess to the actual total score wins the tiebreaker</p>
                   </div>
                 )}
 
