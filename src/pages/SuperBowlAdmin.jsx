@@ -160,6 +160,12 @@ function SuperBowlAdminContent() {
       await loadData();
     } catch (err) {
       console.error(err);
+      if (err.message?.includes('not found')) {
+        // Square already deleted, just reload
+        await loadData();
+      } else {
+        alert('Error deleting square. Please try again.');
+      }
     }
   };
 

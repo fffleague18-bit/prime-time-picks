@@ -61,13 +61,18 @@ function SuperBowlSquaresContent() {
 
     // Subscribe to real-time updates
     const unsubscribe = base44.entities.SuperBowlSquare.subscribe((event) => {
-      if (event.type === 'create' || event.type === 'update') {
-        setSquares(prev => {
-          const filtered = prev.filter(s => s.id !== event.id);
-          return [...filtered, event.data];
-        });
-      } else if (event.type === 'delete') {
-        setSquares(prev => prev.filter(s => s.id !== event.id));
+      try {
+        if (event.type === 'create' || event.type === 'update') {
+          setSquares(prev => {
+            const filtered = prev.filter(s => s.id !== event.id);
+            return [...filtered, event.data];
+          });
+        } else if (event.type === 'delete') {
+          setSquares(prev => prev.filter(s => s.id !== event.id));
+        }
+      } catch (err) {
+        console.error('Subscription error:', err);
+        loadData(); // Reload data on error
       }
     });
 
@@ -135,10 +140,19 @@ function SuperBowlSquaresContent() {
             is_locked: true
           };
 
-          if (existing) {
-            await base44.entities.SuperBowlSquare.update(existing.id, data);
-          } else {
-            await base44.entities.SuperBowlSquare.create(data);
+          try {
+            if (existing) {
+              await base44.entities.SuperBowlSquare.update(existing.id, data);
+            } else {
+              await base44.entities.SuperBowlSquare.create(data);
+            }
+          } catch (err) {
+            // If square doesn't exist anymore, create it
+            if (err.message?.includes('not found')) {
+              await base44.entities.SuperBowlSquare.create(data);
+            } else {
+              throw err;
+            }
           }
         }
 
@@ -147,6 +161,8 @@ function SuperBowlSquaresContent() {
         await loadData();
       } catch (err) {
         console.error(err);
+        alert('Error saving squares. Please try again.');
+        await loadData();
       }
     };
 
