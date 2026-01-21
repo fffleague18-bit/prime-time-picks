@@ -12,6 +12,7 @@ function SuperBowlSquaresContent() {
   const [settings, setSettings] = useState(null);
   const [squares, setSquares] = useState([]);
   const [payouts, setPayouts] = useState([]);
+  const [game, setGame] = useState(null);
   const [currentUser, setCurrentUser] = useState(null);
   const [selectedSquares, setSelectedSquares] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
