@@ -58,16 +58,19 @@ function SuperBowlSquares10Content() {
     const unsubscribe = base44.entities.SuperBowlSquare10.subscribe((event) => {
       try {
         if (event.type === 'create' || event.type === 'update') {
-          setSquares(prev => {
-            const filtered = prev.filter(s => s.id !== event.id);
-            return [...filtered, event.data];
-          });
+          if (event.data) {
+            setSquares(prev => {
+              const filtered = prev.filter(s => s.id !== event.id);
+              return [...filtered, event.data];
+            });
+          }
         } else if (event.type === 'delete') {
           setSquares(prev => prev.filter(s => s.id !== event.id));
         }
       } catch (err) {
         console.error('Subscription error:', err);
-        loadData();
+        // Just reload data silently on error
+        setTimeout(() => loadData(), 500);
       }
     });
 
