@@ -79,15 +79,17 @@ function SuperBowlSquaresContent() {
       const user = await base44.auth.me();
       setCurrentUser(user);
 
-      const [settingsData, squaresData, payoutsData] = await Promise.all([
+      const [settingsData, squaresData, payoutsData, gamesData] = await Promise.all([
         base44.entities.SuperBowlSettings.list(),
         base44.entities.SuperBowlSquare.list(),
-        base44.entities.SuperBowlPayout.list()
+        base44.entities.SuperBowlPayout.list(),
+        base44.entities.Game.filter({ game_type: 'Super Bowl' })
       ]);
 
       setSettings(settingsData[0] || null);
       setSquares(squaresData);
       setPayouts(payoutsData);
+      setGame(gamesData[0] || null);
     } catch (err) {
       console.error(err);
     } finally {
