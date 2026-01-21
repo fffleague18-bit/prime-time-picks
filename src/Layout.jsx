@@ -55,7 +55,8 @@ export default function Layout({ children }) {
 
   const navigationItems = [
     { href: createPageUrl("Dashboard"), icon: Home, label: "Dashboard" },
-    { href: createPageUrl("SuperBowlSquares"), icon: Trophy, label: "Super Bowl Squares" },
+    { href: createPageUrl("SuperBowlSquares"), icon: Trophy, label: "Super Bowl Squares ($5)" },
+    { href: createPageUrl("SuperBowlSquares10"), icon: Trophy, label: "Super Bowl Squares ($10)" },
     { href: createPageUrl("Games"), icon: Calendar, label: "Games" },
     { href: createPageUrl("Results"), icon: BarChart3, label: "Results" },
     { href: createPageUrl("Chat"), icon: MessageCircle, label: "Chat", showDot: hasUnreadMessages },
@@ -68,7 +69,8 @@ export default function Layout({ children }) {
     // Level 2 (Admin 2) items
     const admin2Items = [
       { href: createPageUrl("GameManagement"), icon: Settings, label: "Game Management" },
-      { href: createPageUrl("SuperBowlAdmin"), icon: Trophy, label: "Super Bowl Admin" },
+      { href: createPageUrl("SuperBowlAdmin"), icon: Trophy, label: "Super Bowl Admin ($5)" },
+      { href: createPageUrl("SuperBowlAdmin10"), icon: Trophy, label: "Super Bowl Admin ($10)" },
       { href: createPageUrl("PlayerManagement"), icon: Users, label: "Player Management" },
       { href: createPageUrl("Communication"), icon: Mail, label: "Communication" },
     ];
