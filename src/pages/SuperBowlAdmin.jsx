@@ -290,24 +290,27 @@ function SuperBowlAdminContent() {
                   <Input type="number" value={p.amount} onChange={(e) => updatePayout(index, 'amount', e.target.value)} placeholder="Amount" />
                   <Input 
                     value={p.score || ''} 
-                    onChange={(e) => {
-                      updatePayout(index, 'score', e.target.value);
+                    onChange={(e) => updatePayout(index, 'score', e.target.value)} 
+                    onBlur={(e) => {
                       // Auto-populate winner name when score is entered
                       if (e.target.value && e.target.value.includes('-')) {
-                        const [awayScore, homeScore] = e.target.value.split('-').map(n => parseInt(n));
-                        if (!isNaN(awayScore) && !isNaN(homeScore)) {
-                          const winner = squares.find(s => {
-                            if (!settings?.home_numbers || !settings?.away_numbers || !s.is_locked) return false;
-                            const homeDigit = settings.home_numbers[s.col];
-                            const awayDigit = settings.away_numbers[s.row];
-                            return (homeScore % 10 === homeDigit && awayScore % 10 === awayDigit);
-                          });
-                          if (winner) {
-                            updatePayout(index, 'winner_name', winner.player_name);
+                        const parts = e.target.value.split('-');
+                        if (parts.length === 2) {
+                          const [awayScore, homeScore] = parts.map(n => parseInt(n));
+                          if (!isNaN(awayScore) && !isNaN(homeScore)) {
+                            const winner = squares.find(s => {
+                              if (!settings?.home_numbers || !settings?.away_numbers || !s.is_locked) return false;
+                              const homeDigit = settings.home_numbers[s.col];
+                              const awayDigit = settings.away_numbers[s.row];
+                              return (homeScore % 10 === homeDigit && awayScore % 10 === awayDigit);
+                            });
+                            if (winner) {
+                              updatePayout(index, 'winner_name', winner.player_name);
+                            }
                           }
                         }
                       }
-                    }} 
+                    }}
                     placeholder="e.g., 14-10" 
                   />
                   <Input 
