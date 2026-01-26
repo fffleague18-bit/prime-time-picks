@@ -4,7 +4,7 @@ import AuthWrapper from "../components/auth/AuthWrapper";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, DollarSign, Lock, X } from "lucide-react";
+import { Trophy, DollarSign, Lock, X, Edit2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
 
@@ -16,6 +16,8 @@ function SuperBowlSquares10Content() {
   const [selectedSquares, setSelectedSquares] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [customName, setCustomName] = useState('');
+  const [editingSquare, setEditingSquare] = useState(null);
+  const [editName, setEditName] = useState('');
 
   const colors = [
     { bg: 'bg-red-300', border: 'border-red-500', text: 'text-red-950' },
@@ -161,6 +163,35 @@ function SuperBowlSquares10Content() {
 
   const handleRemoveSquare = (row, col) => {
     setSelectedSquares(selectedSquares.filter(s => !(s.row === row && s.col === col)));
+  };
+
+  const handleEditSquare = (square) => {
+    setEditingSquare(square);
+    setEditName(square.player_name);
+  };
+
+  const handleSaveEdit = async () => {
+    if (!editName.trim()) {
+      alert('Please enter a name');
+      return;
+    }
+
+    try {
+      await base44.entities.SuperBowlSquare10.update(editingSquare.id, {
+        player_name: editName.trim()
+      });
+      setEditingSquare(null);
+      setEditName('');
+      await loadData();
+    } catch (err) {
+      console.error(err);
+      alert('Error updating name. Please try again.');
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditingSquare(null);
+    setEditName('');
   };
 
   const mySquares = squares.filter(s => s.player_id === currentUser?.id);
@@ -312,34 +343,65 @@ function SuperBowlSquares10Content() {
 
                           return (
                             <td
-                              key={col}
-                              onClick={() => !isOccupied && !isLocked && handleSquareClick(row, col)}
-                              className={`w-8 h-8 sm:w-12 sm:h-12 border-2 relative cursor-pointer transition-all ${
-                                isSelected ? 'bg-blue-200 border-blue-400' :
-                                square?.player_name && isLocked ? `${playerColor.bg} ${playerColor.border} cursor-not-allowed` :
-                                square?.player_name && !isLocked ? `${playerColor.bg} ${playerColor.border} hover:opacity-80` :
-                                'bg-white border-slate-300 hover:bg-slate-50'
-                              }`}
+                             key={col}
+                             onClick={() => !isOccupied && !isLocked && handleSquareClick(row, col)}
+                             className={`w-8 h-8 sm:w-12 sm:h-12 border-2 relative cursor-pointer transition-all ${
+                               isSelected ? 'bg-blue-200 border-blue-400' :
+                               square?.player_name && isLocked ? `${playerColor.bg} ${playerColor.border} cursor-not-allowed` :
+                               square?.player_name && !isLocked ? `${playerColor.bg} ${playerColor.border} hover:opacity-80` :
+                               'bg-white border-slate-300 hover:bg-slate-50'
+                             }`}
                             >
-                              {square?.player_name && (
-                                <div className="absolute inset-0 flex items-center justify-center p-0.5 sm:p-1">
-                                  <span className={`text-[6px] sm:text-[8px] font-bold text-center leading-[1.1] break-words overflow-hidden ${playerColor?.text || ''}`}>{square.player_name}</span>
-                                </div>
-                              )}
-                              {isLocked && isMine && (
-                                <Lock className="w-2 h-2 sm:w-3 sm:h-3 absolute top-0.5 right-0.5 text-emerald-600" />
-                              )}
-                              {isSelected && !isLocked && (
-                                <button
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleRemoveSquare(row, col);
-                                  }}
-                                  className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-0.5"
-                                >
-                                  <X className="w-2 h-2 sm:w-3 sm:h-3" />
-                                </button>
-                              )}
+                             {editingSquare?.id === square?.id ? (
+                               <div className="absolute inset-0 flex items-center justify-center z-10">
+                                 <div className="bg-white p-2 rounded shadow-lg border-2 border-blue-500 min-w-[120px]" onClick={(e) => e.stopPropagation()}>
+                                   <Input
+                                     value={editName}
+                                     onChange={(e) => setEditName(e.target.value)}
+                                     className="text-xs h-6 mb-1"
+                                     placeholder="Name"
+                                     autoFocus
+                                   />
+                                   <div className="flex gap-1">
+                                     <Button size="sm" onClick={handleSaveEdit} className="h-6 text-xs px-2">Save</Button>
+                                     <Button size="sm" variant="outline" onClick={handleCancelEdit} className="h-6 text-xs px-2">Cancel</Button>
+                                   </div>
+                                 </div>
+                               </div>
+                             ) : (
+                               <>
+                                 {square?.player_name && (
+                                   <div className="absolute inset-0 flex items-center justify-center p-0.5 sm:p-1">
+                                     <span className={`text-[6px] sm:text-[8px] font-bold text-center leading-[1.1] break-words overflow-hidden ${playerColor?.text || ''}`}>{square.player_name}</span>
+                                   </div>
+                                 )}
+                                 {isLocked && isMine && (
+                                   <>
+                                     <Lock className="w-2 h-2 sm:w-3 sm:h-3 absolute top-0.5 right-0.5 text-emerald-600" />
+                                     <button
+                                       onClick={(e) => {
+                                         e.stopPropagation();
+                                         handleEditSquare(square);
+                                       }}
+                                       className="absolute bottom-0.5 right-0.5 bg-blue-500 text-white rounded-full p-0.5 hover:bg-blue-600"
+                                     >
+                                       <Edit2 className="w-2 h-2 sm:w-3 sm:h-3" />
+                                     </button>
+                                   </>
+                                 )}
+                                 {isSelected && !isLocked && (
+                                   <button
+                                     onClick={(e) => {
+                                       e.stopPropagation();
+                                       handleRemoveSquare(row, col);
+                                     }}
+                                     className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-0.5"
+                                   >
+                                     <X className="w-2 h-2 sm:w-3 sm:h-3" />
+                                   </button>
+                                 )}
+                               </>
+                             )}
                             </td>
                           );
                         })}
