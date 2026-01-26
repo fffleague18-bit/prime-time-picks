@@ -1,4 +1,3 @@
-
 import React, { useState, useMemo } from "react";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -21,6 +20,9 @@ const PredictionCategoryCard = ({ title, picks, showNames }) => (
                             <div key={p.id} className="flex items-center gap-2">
                                 <PlayerAvatar icon={p.player_icon} name={p.player_name} className="w-8 h-8" textClassName="text-sm" />
                                 <span className="text-sm font-medium text-slate-700">{p.player_name}</span>
+                                {p.super_bowl_total_guess && (
+                                    <span className="text-xs text-slate-500 ml-auto">{p.super_bowl_total_guess}</span>
+                                )}
                             </div>
                         ))}
                     </div>
