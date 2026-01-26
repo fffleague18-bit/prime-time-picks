@@ -32,7 +32,6 @@ Deno.serve(async (req) => {
 
         const actualSpread = game.home_score - game.away_score; // Home score - Away score
         const totalPoints = game.home_score + game.away_score;
-        const isSuperBowl = game.game_type?.toLowerCase().includes('super bowl');
         let processedCount = 0;
 
         for (const prediction of predictions) {
@@ -92,46 +91,6 @@ Deno.serve(async (req) => {
             } catch (predError) {
                 console.error(`Error processing prediction ${prediction.id}:`, predError);
                 // Continue processing other predictions
-            }
-        }
-
-        // For Super Bowl games, award tiebreaker points to closest guess
-        if (isSuperBowl) {
-            console.log('Processing Super Bowl tiebreaker...');
-            
-            // Get all predictions with tiebreaker guesses
-            const tiebreakerPredictions = predictions.filter(p => p.super_bowl_total_guess != null);
-            
-            if (tiebreakerPredictions.length > 0) {
-                // Find the closest guess
-                let closestPrediction = null;
-                let smallestDifference = Infinity;
-                
-                for (const pred of tiebreakerPredictions) {
-                    const difference = Math.abs(pred.super_bowl_total_guess - totalPoints);
-                    if (difference < smallestDifference) {
-                        smallestDifference = difference;
-                        closestPrediction = pred;
-                    }
-                }
-                
-                if (closestPrediction) {
-                    console.log(`Closest tiebreaker: ${closestPrediction.player_name} guessed ${closestPrediction.super_bowl_total_guess}, actual was ${totalPoints}`);
-                    
-                    // Award 0.5 bonus points for closest tiebreaker guess
-                    const currentPoints = closestPrediction.points_earned || 0;
-                    await serviceRoleClient.entities.Prediction.update(closestPrediction.id, {
-                        points_earned: currentPoints + 0.5
-                    });
-                    
-                    // Store the winning tiebreaker guess on the game
-                    await serviceRoleClient.entities.Game.update(gameId, {
-                        total_points: totalPoints,
-                        winning_tiebreaker_guess: closestPrediction.super_bowl_total_guess
-                    });
-                    
-                    console.log(`Awarded 0.5 tiebreaker points to ${closestPrediction.player_name}`);
-                }
             }
         }
         
