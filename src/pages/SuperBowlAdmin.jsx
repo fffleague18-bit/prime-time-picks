@@ -384,7 +384,16 @@ function SuperBowlAdminContent() {
                     <TableCell>Row {s.row}, Col {s.col}</TableCell>
                     <TableCell className="flex items-center gap-2">
                       {s.player_icon && <PlayerAvatar icon={s.player_icon} name={s.player_name} className="w-6 h-6" />}
-                      {s.player_name || 'Empty'}
+                      <Input 
+                        value={s.player_name || ''}
+                        onChange={async (e) => {
+                          const newName = e.target.value;
+                          await base44.entities.SuperBowlSquare.update(s.id, { player_name: newName });
+                          await loadData();
+                        }}
+                        placeholder="Player name"
+                        className="max-w-[200px]"
+                      />
                     </TableCell>
                     <TableCell>{s.is_locked ? 'Locked' : 'Unlocked'}</TableCell>
                     <TableCell>
