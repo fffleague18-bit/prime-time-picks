@@ -130,10 +130,11 @@ export default function PredictionForm({ game, existingPrediction, onSubmit, onC
             </div>
             
             {game.game_type === 'Super Bowl' && (
-              <div>
+              <div className="border border-slate-300 rounded-lg p-4 bg-slate-50">
                 <Label htmlFor="total-guess" className="font-semibold text-lg">
                   Tiebreaker: Total Points Guess
                 </Label>
+                <p className="text-sm text-slate-600 mb-3">Guess the combined final score</p>
                 <Input 
                   id="total-guess" 
                   type="number" 
@@ -142,6 +143,7 @@ export default function PredictionForm({ game, existingPrediction, onSubmit, onC
                   onChange={(e) => setPrediction(p => ({...p, super_bowl_total_guess: e.target.value}))} 
                   min="0"
                   max="200"
+                  className="bg-white"
                 />
               </div>
             )}
