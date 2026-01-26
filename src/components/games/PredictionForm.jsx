@@ -29,7 +29,7 @@ export default function PredictionForm({ game, existingPrediction, onSubmit, onC
       return;
     }
     
-    if (game.game_type === 'Super Bowl' && (!prediction.super_bowl_total_guess || prediction.super_bowl_total_guess.trim() === '')) {
+    if (game.game_type?.toLowerCase().includes('super bowl') && (!prediction.super_bowl_total_guess || prediction.super_bowl_total_guess.trim() === '')) {
       setFormError('Super Bowl total points guess is required.');
       return;
     }
@@ -41,7 +41,7 @@ export default function PredictionForm({ game, existingPrediction, onSubmit, onC
     };
     
     // Only include Super Bowl guess if it's valid
-    if (game.game_type === 'Super Bowl' && prediction.super_bowl_total_guess && prediction.super_bowl_total_guess.trim() !== '') {
+    if (game.game_type?.toLowerCase().includes('super bowl') && prediction.super_bowl_total_guess && prediction.super_bowl_total_guess.trim() !== '') {
       const guess = parseInt(prediction.super_bowl_total_guess.trim(), 10);
       if (!isNaN(guess) && guess >= 0) {
         cleanPrediction.super_bowl_total_guess = guess;
@@ -129,7 +129,7 @@ export default function PredictionForm({ game, existingPrediction, onSubmit, onC
               </RadioGroup>
             </div>
             
-            {game.game_type === 'Super Bowl' && (
+            {game.game_type?.toLowerCase().includes('super bowl') && (
               <div className="border border-slate-300 rounded-lg p-4 bg-slate-50">
                 <Label htmlFor="total-guess" className="font-semibold text-lg">
                   Tiebreaker: Total Points Guess
