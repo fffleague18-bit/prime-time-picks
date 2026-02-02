@@ -373,36 +373,51 @@ function SuperBowlAdminContent() {
               <TableHeader>
                 <TableRow>
                   <TableHead>Position</TableHead>
+                  <TableHead>All Registered Players</TableHead>
                   <TableHead>Player</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {squares.map(s => (
-                  <TableRow key={s.id}>
-                    <TableCell>Row {s.row}, Col {s.col}</TableCell>
-                    <TableCell className="flex items-center gap-2">
-                      {s.player_icon && <PlayerAvatar icon={s.player_icon} name={s.player_name} className="w-6 h-6" />}
-                      <Input 
-                        value={s.player_name || ''}
-                        onChange={async (e) => {
-                          const newName = e.target.value;
-                          await base44.entities.SuperBowlSquare.update(s.id, { player_name: newName });
-                          await loadData();
-                        }}
-                        placeholder="Player name"
-                        className="max-w-[200px]"
-                      />
-                    </TableCell>
-                    <TableCell>{s.is_locked ? 'Locked' : 'Unlocked'}</TableCell>
-                    <TableCell>
-                      <Button variant="destructive" size="sm" onClick={() => handleDeleteSquare(s.id)}>
-                        <Trash2 className="w-4 h-4" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {squares.map(s => {
+                  const allPlayersInSquare = squares.filter(sq => sq.row === s.row && sq.col === s.col);
+                  return (
+                    <TableRow key={s.id}>
+                      <TableCell>Row {s.row}, Col {s.col}</TableCell>
+                      <TableCell>
+                        <div className="flex flex-col gap-1">
+                          {allPlayersInSquare.map(player => (
+                            <div key={player.id} className="flex items-center gap-2 text-sm">
+                              <PlayerAvatar icon={player.player_icon} name={player.player_name} className="w-5 h-5" textClassName="text-xs" />
+                              <span>{player.player_name}</span>
+                              {player.is_locked && <span className="text-xs text-green-600">(Locked)</span>}
+                            </div>
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell className="flex items-center gap-2">
+                        {s.player_icon && <PlayerAvatar icon={s.player_icon} name={s.player_name} className="w-6 h-6" />}
+                        <Input 
+                          value={s.player_name || ''}
+                          onChange={async (e) => {
+                            const newName = e.target.value;
+                            await base44.entities.SuperBowlSquare.update(s.id, { player_name: newName });
+                            await loadData();
+                          }}
+                          placeholder="Player name"
+                          className="max-w-[200px]"
+                        />
+                      </TableCell>
+                      <TableCell>{s.is_locked ? 'Locked' : 'Unlocked'}</TableCell>
+                      <TableCell>
+                        <Button variant="destructive" size="sm" onClick={() => handleDeleteSquare(s.id)}>
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </CardContent>
