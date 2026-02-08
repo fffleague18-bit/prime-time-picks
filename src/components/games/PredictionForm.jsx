@@ -143,6 +143,7 @@ export default function PredictionForm({ game, existingPrediction, onSubmit, onC
                   onChange={(e) => setPrediction(p => ({...p, super_bowl_total_guess: e.target.value}))} 
                   min="0"
                   max="200"
+                  step="1"
                   className="bg-white"
                 />
               </div>
