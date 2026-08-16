@@ -1,0 +1,91 @@
+{
+  "name": "Game",
+  "type": "object",
+  "properties": {
+    "week": {
+      "type": "integer",
+      "description": "Week number of the game"
+    },
+    "game_date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Date and time of the game"
+    },
+    "away_team": {
+      "type": "string",
+      "description": "Away team name"
+    },
+    "home_team": {
+      "type": "string",
+      "description": "Home team name"
+    },
+    "away_team_icon": {
+      "type": "string",
+      "description": "Away team icon"
+    },
+    "home_team_icon": {
+      "type": "string",
+      "description": "Home team icon"
+    },
+    "spread": {
+      "type": "number",
+      "description": "Point spread for the game"
+    },
+    "over_under": {
+      "type": "number",
+      "description": "Over/under total points"
+    },
+    "game_type": {
+      "type": "string",
+      "description": "Type of game (e.g., Monday Night Football)"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "upcoming",
+        "in_progress",
+        "completed"
+      ],
+      "default": "upcoming",
+      "description": "Current status of the game"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether predictions are allowed for this game"
+    },
+    "prize_pool": {
+      "type": "number",
+      "description": "Prize pool for this game"
+    },
+    "away_score": {
+      "type": "integer",
+      "description": "Final score of away team"
+    },
+    "home_score": {
+      "type": "integer",
+      "description": "Final score of home team"
+    },
+    "total_points": {
+      "type": "integer",
+      "description": "Total points scored in the game"
+    },
+    "winning_tiebreaker_guess": {
+      "type": "integer",
+      "description": "The closest tiebreaker guess for Super Bowl games"
+    }
+  },
+  "required": [
+    "week",
+    "game_date",
+    "away_team",
+    "home_team",
+    "spread",
+    "over_under",
+    "game_type"
+  ],
+  "rls": {
+    "write": {},
+    "read": {}
+  }
+}

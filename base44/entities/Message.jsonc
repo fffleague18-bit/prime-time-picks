@@ -1,0 +1,38 @@
+{
+  "name": "Message",
+  "type": "object",
+  "properties": {
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player who sent the message"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Name of the player who sent the message"
+    },
+    "player_icon": {
+      "type": "string",
+      "description": "Icon of the player who sent the message"
+    },
+    "message": {
+      "type": "string",
+      "description": "The message content"
+    },
+    "file_url": {
+      "type": "string",
+      "description": "URL of attached file if any"
+    },
+    "file_type": {
+      "type": "string",
+      "description": "MIME type of attached file if any"
+    }
+  },
+  "required": [
+    "player_id",
+    "player_name"
+  ],
+  "rls": {
+    "write": {},
+    "read": {}
+  }
+}

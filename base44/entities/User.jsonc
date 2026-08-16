@@ -1,0 +1,66 @@
+{
+  "name": "User",
+  "type": "object",
+  "properties": {
+    "display_name": {
+      "type": "string",
+      "description": "Display name for the user"
+    },
+    "profile_icon": {
+      "type": "string",
+      "description": "User's profile icon"
+    },
+    "super_admin_level": {
+      "type": "integer",
+      "default": 0,
+      "description": "Admin level, 0 = regular user, >0 = admin"
+    },
+    "money_deposited": {
+      "type": "number",
+      "default": 0,
+      "description": "Money deposited by user"
+    },
+    "money_owed": {
+      "type": "number",
+      "default": 0,
+      "description": "Money owed by user"
+    },
+    "total_score": {
+      "type": "number",
+      "default": 0,
+      "description": "Total score for the user"
+    },
+    "time_zone": {
+      "type": "string",
+      "description": "User's timezone"
+    },
+    "sms_notifications": {
+      "type": "boolean",
+      "default": true,
+      "description": "SMS notification preference"
+    },
+    "email_notifications": {
+      "type": "boolean",
+      "default": true,
+      "description": "Email notification preference"
+    },
+    "last_seen_chat": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Last time user viewed chat"
+    },
+    "record": {
+      "type": "string",
+      "description": "Manual override for player record (W-L-P)"
+    },
+    "games_played": {
+      "type": "integer",
+      "description": "Manual override for games played"
+    }
+  },
+  "required": [],
+  "rls": {
+    "write": {},
+    "read": {}
+  }
+}

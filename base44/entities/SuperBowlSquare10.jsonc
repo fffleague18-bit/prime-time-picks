@@ -1,0 +1,43 @@
+{
+  "name": "SuperBowlSquare10",
+  "type": "object",
+  "properties": {
+    "row": {
+      "type": "integer",
+      "description": "Row position (0-9)"
+    },
+    "col": {
+      "type": "integer",
+      "description": "Column position (0-9)"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player who owns this square"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Name of the player who owns this square"
+    },
+    "player_icon": {
+      "type": "string",
+      "description": "Icon of the player who owns this square"
+    },
+    "is_locked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this square is locked (submitted)"
+    },
+    "tiebreaker_guess": {
+      "type": "integer",
+      "description": "Total game score guess for tiebreaker"
+    }
+  },
+  "required": [
+    "row",
+    "col"
+  ],
+  "rls": {
+    "read": {},
+    "write": {}
+  }
+}

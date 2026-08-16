@@ -1,0 +1,54 @@
+{
+  "name": "Prediction",
+  "type": "object",
+  "properties": {
+    "game_id": {
+      "type": "string",
+      "description": "ID of the game being predicted"
+    },
+    "player_id": {
+      "type": "string",
+      "description": "ID of the player making the prediction"
+    },
+    "player_name": {
+      "type": "string",
+      "description": "Name of the player making the prediction"
+    },
+    "player_icon": {
+      "type": "string",
+      "description": "Icon of the player making the prediction"
+    },
+    "spread_pick": {
+      "type": "string",
+      "description": "Player's spread pick (away or home)"
+    },
+    "over_under_pick": {
+      "type": "string",
+      "description": "Player's over/under pick"
+    },
+    "super_bowl_total_guess": {
+      "type": "integer",
+      "description": "Optional tiebreaker guess for Super Bowl games"
+    },
+    "points_earned": {
+      "type": "number",
+      "default": 0,
+      "description": "Points earned from this prediction"
+    },
+    "is_locked": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this prediction is locked"
+    }
+  },
+  "required": [
+    "game_id",
+    "player_id",
+    "spread_pick",
+    "over_under_pick"
+  ],
+  "rls": {
+    "write": {},
+    "read": {}
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Prize",
+  "type": "object",
+  "properties": {
+    "place": {
+      "type": "integer",
+      "description": "Placement (1st, 2nd, 3rd, etc.)"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Prize amount in dollars"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the prize"
+    }
+  },
+  "required": [
+    "place",
+    "amount",
+    "description"
+  ],
+  "rls": {
+    "write": {},
+    "read": {}
+  }
+}

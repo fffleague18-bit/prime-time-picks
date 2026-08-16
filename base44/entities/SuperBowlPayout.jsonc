@@ -1,0 +1,34 @@
+{
+  "name": "SuperBowlPayout",
+  "type": "object",
+  "properties": {
+    "quarter": {
+      "type": "string",
+      "description": "Quarter (Q1, Q2, Q3, Final)"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Payout amount"
+    },
+    "score": {
+      "type": "string",
+      "description": "Score at end of quarter (e.g., 14-10)"
+    },
+    "winner_name": {
+      "type": "string",
+      "description": "Name of the winner"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description of the payout"
+    }
+  },
+  "required": [
+    "quarter",
+    "amount"
+  ],
+  "rls": {
+    "read": {},
+    "write": {}
+  }
+}

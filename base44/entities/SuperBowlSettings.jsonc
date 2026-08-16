@@ -1,0 +1,46 @@
+{
+  "name": "SuperBowlSettings",
+  "type": "object",
+  "properties": {
+    "home_team_name": {
+      "type": "string",
+      "description": "Home team name"
+    },
+    "away_team_name": {
+      "type": "string",
+      "description": "Away team name"
+    },
+    "home_team_icon": {
+      "type": "string",
+      "description": "Home team icon URL"
+    },
+    "away_team_icon": {
+      "type": "string",
+      "description": "Away team icon URL"
+    },
+    "home_numbers": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "description": "Random numbers 0-9 for home team (top)"
+    },
+    "away_numbers": {
+      "type": "array",
+      "items": {
+        "type": "integer"
+      },
+      "description": "Random numbers 0-9 for away team (left)"
+    },
+    "game_started": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the game has started (shows numbers)"
+    }
+  },
+  "rls": {
+    "read": {},
+    "write": {}
+  },
+  "required": []
+}
