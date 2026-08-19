@@ -36,6 +36,10 @@
       "type": "boolean",
       "default": false,
       "description": "Whether the game has started (shows numbers)"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season name (e.g., 2025-2026)"
     }
   },
   "rls": {

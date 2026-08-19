@@ -30,6 +30,10 @@
     "tiebreaker_guess": {
       "type": "integer",
       "description": "Total game score guess for tiebreaker"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season name (e.g., 2025-2026)"
     }
   },
   "required": [

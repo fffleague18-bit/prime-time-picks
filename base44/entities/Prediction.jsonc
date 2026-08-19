@@ -39,6 +39,10 @@
       "type": "boolean",
       "default": false,
       "description": "Whether this prediction is locked"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season name (e.g., 2025-2026)"
     }
   },
   "required": [

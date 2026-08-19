@@ -20,6 +20,7 @@ import { calculateResults } from "@/functions/calculateResults";
 import { recalculateAllResults } from "@/functions/recalculateAllResults";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "@/utils";
+import { useSeason } from "@/lib/SeasonContext";
 
 // Helper to parse date from DB and FORCE it to be treated as UTC by appending Z if missing
 const parseGameDateAsUTC = (dateString) => {
@@ -41,6 +42,7 @@ const convertPSTtoUTC = (localDateTimeString) => {
 
 
 function GameManagementContent() {
+  const { currentSeason } = useSeason();
   const [games, setGames] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -73,9 +75,10 @@ function GameManagementContent() {
   const [isRecalculating, setIsRecalculating] = useState(false);
 
   const loadGames = useCallback(async () => {
+    if (!currentSeason) return;
     setIsLoading(true);
     try {
-      const gameData = await Game.list('game_date', 2000);
+      const gameData = await Game.filter({ season: currentSeason }, 'game_date', 2000);
       setGames(gameData);
     } catch (err) {
       setError("Failed to load games.");
@@ -83,7 +86,7 @@ function GameManagementContent() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [currentSeason]);
 
   useEffect(() => {
     loadGames();
@@ -259,6 +262,7 @@ function GameManagementContent() {
         game_type: formData.game_type,
         status: formData.status,
         is_active: formData.is_active,
+        season: editingGame?.season || currentSeason,
       };
 
       if (formData.prize_pool !== '' && formData.prize_pool !== null && !isNaN(parseFloat(formData.prize_pool))) {

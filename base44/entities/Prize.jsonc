@@ -13,6 +13,10 @@
     "description": {
       "type": "string",
       "description": "Description of the prize"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season name (e.g., 2025-2026)"
     }
   },
   "required": [

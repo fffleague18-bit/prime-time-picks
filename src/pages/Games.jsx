@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import GameRules from "../components/games/GameRules";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useSeason } from "@/lib/SeasonContext";
 
 const gameTypeColors = {
   "Monday Night Football": "border-l-4 border-l-blue-500 bg-blue-50/30",
@@ -32,6 +33,7 @@ const parseGameDateAsUTC = (dateString) => {
 };
 
 function GamesContent() {
+  const { currentSeason } = useSeason();
   const [games, setGames] = useState([]);
   const [predictions, setPredictions] = useState([]);
   const [currentUser, setCurrentUser] = useState(null);
@@ -45,13 +47,14 @@ function GamesContent() {
 
   useEffect(() => {
     const loadData = async () => {
+      if (!currentSeason) return;
       setIsLoading(true);
       try {
         const user = await User.me();
         setCurrentUser(user);
         const [gamesData, predsData] = await Promise.all([
-          Game.list('game_date', 2000),
-          Prediction.filter({ player_id: user.id }, '-created_date', 1000)
+          Game.filter({ season: currentSeason }, 'game_date', 2000),
+          Prediction.filter({ player_id: user.id, season: currentSeason }, '-created_date', 1000)
         ]);
         setGames(gamesData);
         setPredictions(predsData);
@@ -70,11 +73,11 @@ function GamesContent() {
       } finally {
         setIsLoading(false);
       }
-    };
-    loadData();
-  }, []);
-  
-  const formatInUserTimezone = (dateString) => {
+      };
+      loadData();
+      }, [currentSeason]);
+
+      const formatInUserTimezone = (dateString) => {
     // Parse the date as UTC
     const utcDate = parseGameDateAsUTC(dateString);
     let tz = currentUser?.time_zone;
@@ -134,7 +137,8 @@ function GamesContent() {
         player_name: currentUser.display_name || currentUser.full_name || currentUser.email || "Player",
         player_icon: currentUser.profile_icon || '🏈',
         spread_pick: predictionData.spread_pick,
-        over_under_pick: predictionData.over_under_pick
+        over_under_pick: predictionData.over_under_pick,
+        season: selectedGame.season || currentSeason,
       };
 
       if (predictionData.super_bowl_total_guess && !isNaN(predictionData.super_bowl_total_guess)) {

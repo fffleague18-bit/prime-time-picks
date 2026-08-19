@@ -9,8 +9,10 @@ import { Label } from "@/components/ui/label";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Upload, Shuffle, Save, Trash2 } from "lucide-react";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
+import { useSeason } from "@/lib/SeasonContext";
 
 function SuperBowlAdmin10Content() {
+  const { currentSeason } = useSeason();
   const [settings, setSettings] = useState(null);
   const [squares, setSquares] = useState([]);
   const [payouts, setPayouts] = useState([]);
@@ -25,14 +27,15 @@ function SuperBowlAdmin10Content() {
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [currentSeason]);
 
   const loadData = async () => {
+    if (!currentSeason) return;
     try {
       const [settingsData, squaresData, payoutsData] = await Promise.all([
-        base44.entities.SuperBowlSettings10.list(),
-        base44.entities.SuperBowlSquare10.list(),
-        base44.entities.SuperBowlPayout10.list()
+        base44.entities.SuperBowlSettings10.filter({ season: currentSeason }),
+        base44.entities.SuperBowlSquare10.filter({ season: currentSeason }),
+        base44.entities.SuperBowlPayout10.filter({ season: currentSeason })
       ]);
 
       const s = settingsData[0];
@@ -42,6 +45,11 @@ function SuperBowlAdmin10Content() {
         setAwayTeamName(s.away_team_name || '');
         setHomeTeamIcon(s.home_team_icon || '🏈');
         setAwayTeamIcon(s.away_team_icon || '🏈');
+      } else {
+        setHomeTeamName('');
+        setAwayTeamName('');
+        setHomeTeamIcon('🏈');
+        setAwayTeamIcon('🏈');
       }
 
       setSquares(squaresData);
@@ -101,7 +109,8 @@ function SuperBowlAdmin10Content() {
         home_team_icon: homeTeamIcon,
         away_team_icon: awayTeamIcon,
         home_numbers: settings?.home_numbers || numbers.home_numbers,
-        away_numbers: settings?.away_numbers || numbers.away_numbers
+        away_numbers: settings?.away_numbers || numbers.away_numbers,
+        season: settings?.season || currentSeason,
       };
 
       if (settings) {
@@ -134,7 +143,8 @@ function SuperBowlAdmin10Content() {
           amount: parseFloat(payout.amount),
           score: payout.score || null,
           winner_name: payout.winner_name || null,
-          description: payout.description
+          description: payout.description,
+          season: payout.season || currentSeason,
         };
         
         if (payout.id) {

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Game } from "@/entities/Game";
 import { Prediction } from "@/entities/Prediction";
@@ -11,8 +10,10 @@ import { Check, X, BarChartHorizontal, Home, TrendingUp, TrendingDown, Percent, 
 import { format } from 'date-fns';
 import PredictionsBreakdownTable from "../components/results/PredictionsBreakdownTable";
 import AllPlayersGameSummary from "../components/results/AllPlayersGameSummary";
+import { useSeason } from "@/lib/SeasonContext";
 
 function ResultsContent() {
+  const { currentSeason } = useSeason();
   const [completedGames, setCompletedGames] = useState([]);
   const [gamesForBreakdown, setGamesForBreakdown] = useState([]); // New state for the breakdown component
   const [predictions, setPredictions] = useState([]);
@@ -36,14 +37,15 @@ function ResultsContent() {
 
   useEffect(() => {
     const loadData = async () => {
+      if (!currentSeason) return;
       try {
         const user = await User.me();
         setCurrentUser(user);
         const [completedGamesData, inProgressGamesData, predsData, allPredsData] = await Promise.all([
-          Game.filter({ status: "completed" }, "-game_date", 1000),
-          Game.filter({ status: "in_progress" }, "-game_date", 100), // Also fetch in-progress games
-          Prediction.filter({ player_id: user.id }, undefined, 1000),
-          Prediction.list(undefined, 5000) // Get all predictions from all players
+          Game.filter({ status: "completed", season: currentSeason }, "-game_date", 1000),
+          Game.filter({ status: "in_progress", season: currentSeason }, "-game_date", 100),
+          Prediction.filter({ player_id: user.id, season: currentSeason }, undefined, 1000),
+          Prediction.filter({ season: currentSeason }, undefined, 5000)
         ]);
         setCompletedGames(completedGamesData);
         setGamesForBreakdown([...inProgressGamesData, ...completedGamesData]); // Combine for breakdown view
@@ -117,11 +119,11 @@ function ResultsContent() {
       } finally {
         setIsLoading(false);
       }
-    };
-    loadData();
-  }, []);
-  
-  if (isLoading) {
+      };
+      loadData();
+      }, [currentSeason]);
+
+      if (isLoading) {
     return <div className="p-8">Loading results...</div>;
   }
 

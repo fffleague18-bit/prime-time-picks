@@ -7,8 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Trophy, DollarSign, Lock, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
+import { useSeason } from "@/lib/SeasonContext";
 
 function SuperBowlSquares10Content() {
+  const { currentSeason } = useSeason();
   const [settings, setSettings] = useState(null);
   const [squares, setSquares] = useState([]);
   const [payouts, setPayouts] = useState([]);
@@ -75,17 +77,18 @@ function SuperBowlSquares10Content() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [currentSeason]);
 
   const loadData = async () => {
+    if (!currentSeason) return;
     try {
       const user = await base44.auth.me();
       setCurrentUser(user);
 
       const [settingsData, squaresData, payoutsData] = await Promise.all([
-        base44.entities.SuperBowlSettings10.list(),
-        base44.entities.SuperBowlSquare10.list(),
-        base44.entities.SuperBowlPayout10.list()
+        base44.entities.SuperBowlSettings10.filter({ season: currentSeason }),
+        base44.entities.SuperBowlSquare10.filter({ season: currentSeason }),
+        base44.entities.SuperBowlPayout10.filter({ season: currentSeason })
       ]);
 
       setSettings(settingsData[0] || null);
@@ -131,7 +134,8 @@ function SuperBowlSquares10Content() {
           player_id: currentUser.id,
           player_name: customName.trim(),
           player_icon: currentUser.icon,
-          is_locked: true
+          is_locked: true,
+          season: currentSeason,
         };
 
         try {

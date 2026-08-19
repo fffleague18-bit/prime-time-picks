@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Game, Prediction, User } from "@/entities/all";
 import AuthWrapper from "../components/auth/AuthWrapper";
@@ -12,8 +11,10 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertCircle, CheckCircle, Trash2, Plus } from "lucide-react";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
+import { useSeason } from "@/lib/SeasonContext";
 
 function ManualPredictionsContent() {
+  const { currentSeason } = useSeason();
   const [games, setGames] = useState([]);
   const [players, setPlayers] = useState([]);
   const [predictions, setPredictions] = useState([]);
@@ -29,7 +30,7 @@ function ManualPredictionsContent() {
 
   useEffect(() => {
     loadInitialData();
-  }, []);
+  }, [currentSeason]);
 
   useEffect(() => {
     if (selectedGame) {
@@ -40,10 +41,11 @@ function ManualPredictionsContent() {
   }, [selectedGame]);
 
   const loadInitialData = async () => {
+    if (!currentSeason) return;
     setIsLoading(true);
     try {
       const [gamesData, playersData] = await Promise.all([
-        Game.list('game_date', 1000), // Sorted by game_date ascending
+        Game.filter({ season: currentSeason }, 'game_date', 1000),
         User.list(undefined, 1000)
       ]);
       setGames(gamesData);
@@ -102,7 +104,8 @@ function ManualPredictionsContent() {
         player_name: player.display_name || player.full_name || player.email || "Player",
         player_icon: player.profile_icon || '🏈',
         spread_pick: spreadPick,
-        over_under_pick: overUnderPick
+        over_under_pick: overUnderPick,
+        season: selectedGame.season || currentSeason,
       };
 
       if (selectedGame.game_type === 'Super Bowl' && superBowlGuess && !isNaN(parseInt(superBowlGuess))) {

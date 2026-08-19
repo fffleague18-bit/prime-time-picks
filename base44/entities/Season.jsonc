@@ -1,0 +1,37 @@
+{
+  "name": "Season",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Season name (e.g., 2025-2026)"
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this is the current active season"
+    },
+    "is_archived": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether this season is archived (past season)"
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Season start date"
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Season end date"
+    }
+  },
+  "required": [
+    "name"
+  ],
+  "rls": {
+    "read": {},
+    "write": {}
+  }
+}

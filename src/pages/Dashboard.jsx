@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { User } from "@/entities/User";
 import { Prize } from "@/entities/Prize";
@@ -10,9 +9,11 @@ import { createPageUrl } from "@/utils";
 import { Trophy, Users, Calendar } from "lucide-react";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
 import { Badge } from "@/components/ui/badge";
+import { useSeason } from "@/lib/SeasonContext";
 
 // COMPLETELY RESTRUCTURED DASHBOARD - NO PREDICTION BREAKDOWN ANYWHERE
 function DashboardContent() {
+  const { currentSeason } = useSeason();
   const [currentUser, setCurrentUser] = useState(null);
   const [leaderboard, setLeaderboard] = useState([]);
   const [prizes, setPrizes] = useState([]);
@@ -20,6 +21,7 @@ function DashboardContent() {
 
   useEffect(() => {
     const loadDashboardData = async () => {
+      if (!currentSeason) return;
       setIsLoading(true);
       try {
         const user = await User.me();
@@ -29,7 +31,7 @@ function DashboardContent() {
         // We now assume total_score, record, and games_played are calculated and overridden on the backend
         const [allUsers, allPrizes] = await Promise.all([
           User.list('-total_score', 2000), // Sort by score directly from the API
-          Prize.list('place', 100),
+          Prize.filter({ season: currentSeason }, 'place', 100),
         ]);
 
         setPrizes(allPrizes);
@@ -55,7 +57,7 @@ function DashboardContent() {
     };
     
     loadDashboardData();
-  }, []);
+  }, [currentSeason]);
 
   if (isLoading) {
     return (

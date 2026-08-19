@@ -7,8 +7,10 @@ import { Badge } from "@/components/ui/badge";
 import { Trophy, DollarSign, Lock, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import PlayerAvatar from "../components/shared/PlayerAvatar";
+import { useSeason } from "@/lib/SeasonContext";
 
 function SuperBowlSquaresContent() {
+  const { currentSeason } = useSeason();
   const [settings, setSettings] = useState(null);
   const [squares, setSquares] = useState([]);
   const [payouts, setPayouts] = useState([]);
@@ -77,18 +79,19 @@ function SuperBowlSquaresContent() {
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [currentSeason]);
 
   const loadData = async () => {
+    if (!currentSeason) return;
     try {
       const user = await base44.auth.me();
       setCurrentUser(user);
 
       const [settingsData, squaresData, payoutsData, gamesData] = await Promise.all([
-        base44.entities.SuperBowlSettings.list(),
-        base44.entities.SuperBowlSquare.list(),
-        base44.entities.SuperBowlPayout.list(),
-        base44.entities.Game.filter({ game_type: 'Super Bowl' })
+        base44.entities.SuperBowlSettings.filter({ season: currentSeason }),
+        base44.entities.SuperBowlSquare.filter({ season: currentSeason }),
+        base44.entities.SuperBowlPayout.filter({ season: currentSeason }),
+        base44.entities.Game.filter({ game_type: 'Super Bowl', season: currentSeason })
       ]);
 
       setSettings(settingsData[0] || null);
@@ -137,7 +140,8 @@ function SuperBowlSquaresContent() {
             player_id: currentUser.id,
             player_name: customName.trim(),
             player_icon: currentUser.icon,
-            is_locked: true
+            is_locked: true,
+            season: currentSeason,
           };
 
           try {

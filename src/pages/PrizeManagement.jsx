@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useCallback } from "react";
 import { Prize } from "@/entities/Prize";
 import { User } from "@/entities/User";
@@ -10,8 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, Trophy, AlertCircle, CheckCircle } from "lucide-react";
+import { useSeason } from "@/lib/SeasonContext";
 
 function PrizeManagementContent() {
+  const { currentSeason } = useSeason();
   const [prizes, setPrizes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
@@ -25,9 +26,10 @@ function PrizeManagementContent() {
   });
 
   const loadPrizes = useCallback(async () => {
+    if (!currentSeason) return;
     setIsLoading(true);
     try {
-      const prizeData = await Prize.list('place', 100);
+      const prizeData = await Prize.filter({ season: currentSeason }, 'place', 100);
       setPrizes(prizeData);
     } catch (err) {
       setError("Failed to load prizes.");
@@ -35,7 +37,7 @@ function PrizeManagementContent() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [currentSeason]);
 
   useEffect(() => {
     loadPrizes();
@@ -64,7 +66,8 @@ function PrizeManagementContent() {
       const payload = {
         ...formData,
         place: parseInt(formData.place),
-        amount: parseFloat(formData.amount)
+        amount: parseFloat(formData.amount),
+        season: editingPrize?.season || currentSeason,
       };
 
       if (editingPrize) {

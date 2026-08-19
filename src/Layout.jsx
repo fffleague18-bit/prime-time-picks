@@ -6,6 +6,7 @@ import { Message } from "@/entities/Message";
 import { Trophy, Calendar, BarChart3, Home, Settings, User as UserIcon, Users, MessageCircle, Gift, LogOut, Mail, Menu, UserPlus, Bot, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import SeasonSwitcher from "@/components/shared/SeasonSwitcher";
 
 export default function Layout({ children }) {
   const location = useLocation();
@@ -103,6 +104,7 @@ export default function Layout({ children }) {
           <h2 className="font-bold text-xl">Football League</h2>
         </div>
       </div>
+      <SeasonSwitcher />
       <nav className="flex-1 p-4 space-y-2">
         <p className="text-sm font-semibold text-slate-500 px-3">Menu</p>
         {navigationItems.map(item => <NavLink key={item.label} href={item.href} icon={item.icon} showDot={item.showDot}>{item.label}</NavLink>)}

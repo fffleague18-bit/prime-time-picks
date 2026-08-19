@@ -73,6 +73,10 @@
     "winning_tiebreaker_guess": {
       "type": "integer",
       "description": "The closest tiebreaker guess for Super Bowl games"
+    },
+    "season": {
+      "type": "string",
+      "description": "Season name (e.g., 2025-2026)"
     }
   },
   "required": [
